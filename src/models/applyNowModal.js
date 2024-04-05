@@ -1,42 +1,25 @@
-const mongoose = require("mongoose");
+// recordModel.js
+const db = require('../../db');
 
-const applyNowSchema = mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-    },
-    title: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    phone: {
-      type: String,
-      required: true,
-    },
-    address: {
-      type: String,
-      required: true,
-    },
-    email: {
-      type: String,
-      required: true,
-    },
-    confmEmail: {
-      type: String,
-      required: true,
-    },
-    cover_letter: {
-      type: String,
-      required: true,
-    },
-    cv: {
-      type: String,
-      required: true,
-    },
-  },
-  { timestamps: true }
-);
+function getApplyNow(callback) {
+    db.query('SELECT * FROM applyNow', callback);
+}
 
-module.exports = mongoose.model("applyNow", applyNowSchema);
+function createApplyNow(recordData, callback) {
+    db.query('INSERT INTO applyNow SET ?', recordData, callback);
+}
+
+function updateApplyNow(id, recordData, callback) {
+    db.query('UPDATE applyNow SET ? WHERE id = ?', [recordData, id], callback);
+}
+
+function deleteApplyNow(id, callback) {
+    db.query('DELETE FROM applyNow WHERE id = ?', id, callback);
+}
+
+module.exports = {
+    getApplyNow,
+    createApplyNow,
+    updateApplyNow,
+    deleteApplyNow
+};

@@ -1,57 +1,41 @@
 require("./db");
 const express = require("express");
 const cors = require("cors");
-const fs = require('fs').promises;
-const path = require('path');
+const fs = require("fs").promises;
+const path = require("path");
 const app = express();
+const env = require("dotenv").config();
 app.use(express.json());
 app.use(cors());
+app.use("/uploads", express.static(path.join(__dirname, "./uploads")));
 
-
-// Function to create 'uploads' folder if it doesn't exist
-async function createUploadsFolder() {
-  const uploadsFolderPath = path.join(__dirname, 'uploads');
-  try {
-    // Check if uploads folder exists
-    const folderExists = await fs.stat(uploadsFolderPath);
-    if (!folderExists.isDirectory()) {
-      // If it exists but is not a directory (e.g., a file), handle the error
-      throw new Error(`${uploadsFolderPath} is not a directory.`);
-    }
-    console.log("Uploads folder already exists.");
-  } catch (error) {
-    if (error.code === 'ENOENT') {
-      // If uploads folder does not exist, create it
-      console.log("Uploads folder does not exist, creating...");
-      await fs.mkdir(uploadsFolderPath);
-    } else {
-      // Handle other errors
-      console.error('Error checking/creating uploads folder:', error);
-    }
-  }
-}
-
-// Create 'uploads' folder when the application starts
-createUploadsFolder().catch(err => {
-  console.error('Error creating uploads folder:', err);
-  process.exit(1); // Exit the application if there's an error creating the folder
-});
 // Routes
+
+
+const recordsRoutes = require("./src/routes/contactRoutes");
+app.use("/contact", recordsRoutes);
+const applyNowRoutes = require("./src/routes/applyNowRoutes");
+app.use("/applynow", applyNowRoutes);
+const quoteRoutes = require("./src/routes/quoteRoutes");
+app.use("/quotes", quoteRoutes);
+const locationRoutes = require("./src/routes/locationRoute");
+app.use("/location", locationRoutes);
+const LifeCategoryRoutes = require("./src/routes/lifeCategoryRoute");
+app.use("/life_category", LifeCategoryRoutes);
+const lifeCategoryDetailsRoutes = require("./src/routes/lifeCategoryDetailsRoute");
+app.use("/life_category_details", lifeCategoryDetailsRoutes);
+const jobOpeningRoutes = require("./src/routes/jobOpeningRoutes");
+app.use("/jobs", jobOpeningRoutes);
+const internshipOpeningRoutes = require("./src/routes/internshipOpeningRoutes");
+app.use("/internship", internshipOpeningRoutes);
+const testimonialsRoutes = require("./src/routes/testimonialRoute");
+app.use("/testimonials", testimonialsRoutes);
+const clientCountRoutes = require("./src/routes/clientCountRouters");
+app.use("/clientCount", clientCountRoutes);
+
 app.get("/", (req, res) => {
   res.send(`Server is running on port no. ${process.env.APP_PORT}`);
 });
-
-// Contact form
-const contactRouter = require("./src/routes/contactRoute");
-app.use("/contact", contactRouter);
-
-// Quotes form
-const quoteRouter = require("./src/routes/quotesRoute");
-app.use("/quote", quoteRouter);
-
-// Apply Now form
-const applyNowRouter = require("./src/routes/applyNowRoute");
-app.use("/career", applyNowRouter);
 
 // Start server
 app.listen(process.env.APP_PORT, () => {
