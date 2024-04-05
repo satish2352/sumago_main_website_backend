@@ -2,8 +2,8 @@ const express = require('express');
 const { body } = require('express-validator');
 const { getApplyNowRecord, createApplyNowRecord, updateApplyNowRecord, deleteApplyNowRecord } = require('../controllers/applyNowController');
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' }); // Specify the directory where files will be stored
-
+// const upload = multer({ dest: 'uploads/' }); // Specify the directory where files will be stored
+const { upload } = require("../controllers/applyNowController");
 const router = express.Router();
 
 router.get('/find', getApplyNowRecord);

@@ -1,68 +1,90 @@
-const { validationResult } = require('express-validator');
-const recordModel = require('../models/applyNowModal');
-const multer = require('multer');
-const upload = multer({ dest: 'uploads/' }); // Specify the directory where files will be stored
-
+const { validationResult } = require("express-validator");
+const recordModel = require("../models/applyNowModal");
+const path = require("path");
+const fs = require("fs")
+const multer = require("multer");
+// const upload = multer({ dest: 'uploads/' }); // Specify the directory where files will be stored
 
 function getApplyNowRecord(req, res) {
-    recordModel.getApplyNow((err, results) => {
-        if (err) {
-            console.error('Error fetching records:', err);
-            return res.status(500).json({ error: 'Internal Server Error' });
-        }
-        res.json(results);
-    });
-}
-
-function createApplyNowRecord(req, res) {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+  recordModel.getApplyNow((err, results) => {
+    if (err) {
+      console.error("Error fetching records:", err);
+      return res.status(500).json({ error: "Internal Server Error" });
     }
+    res.json(results);
+  });
+}
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadDir = path.join(__dirname, "../../uploads");
+    // Check if the upload directory exists, if not, create it
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    cb(
+      null,
+      // file.fieldname + "_" + Date.now() + path.extname(file.originalname)
+      file.originalname
+    );
+  },
+});
 
-    const recordData = req.body;
-    const cvFile = req.files['cv'][0]; // Uploaded CV file
-    const coverLetterFile = req.files['cover_letter'][0]; // Uploaded cover letter file
+const upload = multer({ storage: storage });
+function createApplyNowRecord(req, res) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
 
-    // Assuming 'cv' and 'cover_letter' are the fields in the applyNow table to store file names
-    recordData.cv = cvFile.filename;
-    recordData.cover_letter = coverLetterFile.filename;
+  const recordData = req.body;
+  const cvFile = req.files["cv"][0]; // Uploaded CV file
+  const coverLetterFile = req.files["cover_letter"][0]; // Uploaded cover letter file
 
-    recordModel.createApplyNow(recordData, (err, result) => {
-        if (err) {
-            console.error('Error creating record:', err);
-            return res.status(500).json({ error: 'Internal Server Error' });
-        }
-        res.status(201).json({ message: 'Record created successfully', result: recordData });
-    });
+  // Assuming 'cv' and 'cover_letter' are the fields in the applyNow table to store file names
+  recordData.cv = cvFile.filename;
+  recordData.cover_letter = coverLetterFile.filename;
+
+  recordModel.createApplyNow(recordData, (err, result) => {
+    if (err) {
+      console.error("Error creating record:", err);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+    res
+      .status(201)
+      .json({ message: "Record created successfully", result: recordData });
+  });
 }
 
 function updateApplyNowRecord(req, res) {
-    const { id } = req.params;
-    const recordData = req.body;
-    recordModel.updateApplyNow(id, recordData, (err, result) => {
-        if (err) {
-            console.error('Error updating record:', err);
-            return res.status(500).json({ error: 'Internal Server Error' });
-        }
-        res.send('Record updated successfully');
-    });
+  const { id } = req.params;
+  const recordData = req.body;
+  recordModel.updateApplyNow(id, recordData, (err, result) => {
+    if (err) {
+      console.error("Error updating record:", err);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+    res.send("Record updated successfully");
+  });
 }
 
 function deleteApplyNowRecord(req, res) {
-    const { id } = req.params;
-    recordModel.deleteApplyNow(id, (err, result) => {
-        if (err) {
-            console.error('Error deleting record:', err);
-            return res.status(500).json({ error: 'Internal Server Error' });
-        }
-        res.send('Record deleted successfully');
-    });
+  const { id } = req.params;
+  recordModel.deleteApplyNow(id, (err, result) => {
+    if (err) {
+      console.error("Error deleting record:", err);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+    res.send("Record deleted successfully");
+  });
 }
 
 module.exports = {
-    getApplyNowRecord,
-    createApplyNowRecord,
-    updateApplyNowRecord,
-    deleteApplyNowRecord
+  getApplyNowRecord,
+  createApplyNowRecord,
+  updateApplyNowRecord,
+  deleteApplyNowRecord,
+  upload
 };
