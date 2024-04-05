@@ -1,6 +1,6 @@
 const { validationResult } = require("express-validator");
 const path = require("path");
-const fs = require("fs")
+const fs = require("fs");
 const recordModel = require("../models/testimonialModal");
 const multer = require("multer");
 const env = require("dotenv").config();
@@ -31,17 +31,38 @@ function gettestimonialsRecord(req, res) {
       console.error("Error fetching records:", err);
       return res.status(500).json({ error: "Internal Server Error" });
     }
-
-    const modifiedResults = results.map(item => {
-      console.log("result", item);
+    const modifiedResults = results.map((item) => {
       // Add a new property called 'modified' with value true
-      return { id: item.id, review: item.review, img: `${process.env.serverURL}${item.img}`, designation: item.designation };
+      return {
+        id: item.id,
+        name: item.name,
+        designation: item.designation,
+        review: item.review,
+        img: `${process.env.serverURL}${item.img}`,
+      };
     });
 
     // Send the modified data as response
     res.json(modifiedResults);
   });
 }
+// function gettestimonialsRecord(req, res) {
+//   recordModel.gettestimonials((err, results) => {
+//     if (err) {
+//       console.error("Error fetching records:", err);
+//       return res.status(500).json({ error: "Internal Server Error" });
+//     }
+
+//     const modifiedResults = results.map(item => {
+//       console.log("result", item);
+//       // Add a new property called 'modified' with value true
+//       return { id: item.id, review: item.review, img: `${process.env.serverURL}${item.img}`, designation: item.designation };
+//     });
+
+//     // Send the modified data as response
+//     res.json(modifiedResults);
+//   });
+// }
 
 function createtestimonialsRecord(req, res) {
   const errors = validationResult(req);
@@ -50,8 +71,8 @@ function createtestimonialsRecord(req, res) {
   }
   const recordData = req.body;
   const imgFile = req.files["img"][0]; // Uploaded CV file
-  
-  recordData.img = imgFile.originalname
+
+  recordData.img = imgFile.originalname;
   recordModel.createtestimonials(recordData, (err, result) => {
     if (err) {
       console.error("Error creating record:", err);
@@ -91,5 +112,5 @@ module.exports = {
   createtestimonialsRecord,
   updatetestimonialsRecord,
   deletetestimonialsRecord,
-  upload
+  upload,
 };

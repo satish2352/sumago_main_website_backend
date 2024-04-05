@@ -1,7 +1,7 @@
 // recordModel.js
 const db = require('../../db');
 
-function gettestimonials(category, callback) {
+function gettestimonials(callback) {
     db.query('SELECT * FROM testimonials', callback);
 }
 
