@@ -32,6 +32,8 @@ const testimonialsRoutes = require("./src/routes/testimonialRoute");
 app.use("/testimonials", testimonialsRoutes);
 const clientCountRoutes = require("./src/routes/clientCountRouters");
 app.use("/clientCount", clientCountRoutes);
+const loginRoutes = require("./src/routes/userRoutes");
+app.use("/auth", loginRoutes);
 
 app.get("/", (req, res) => {
   res.send(`Server is running on port no. ${process.env.APP_PORT}`);

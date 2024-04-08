@@ -11,7 +11,25 @@ function getApplyNowRecord(req, res) {
       console.error("Error fetching records:", err);
       return res.status(500).json({ error: "Internal Server Error" });
     }
-    res.json(results);
+    console.log("results",results);
+    const modifiedResults = results.map((item) => {
+      // Add a new property called 'modified' with value true
+      return {
+        id: item.id,
+        name: item.name,
+        title: item.title,
+        email: item.email,
+        confmEmail: item.confmEmail,
+        phone: item.phone,
+        address: item.address,
+        applicationType: item.applicationType,
+        cv: `${process.env.serverURL}${item.cv}`,
+        cover_letter: `${process.env.serverURL}${item.cover_letter}`,
+      };
+    });
+
+    // Send the modified data as response
+    res.json(modifiedResults);
   });
 }
 const storage = multer.diskStorage({
@@ -24,6 +42,7 @@ const storage = multer.diskStorage({
     cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
+    console.log("file_______", file);
     cb(
       null,
       // file.fieldname + "_" + Date.now() + path.extname(file.originalname)
@@ -44,9 +63,8 @@ function createApplyNowRecord(req, res) {
   const coverLetterFile = req.files["cover_letter"][0]; // Uploaded cover letter file
 
   // Assuming 'cv' and 'cover_letter' are the fields in the applyNow table to store file names
-  recordData.cv = cvFile.filename;
-  recordData.cover_letter = coverLetterFile.filename;
-
+  recordData.cv = cvFile.originalname;
+  recordData.cover_letter = coverLetterFile.originalname;
   recordModel.createApplyNow(recordData, (err, result) => {
     if (err) {
       console.error("Error creating record:", err);

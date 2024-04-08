@@ -1,6 +1,10 @@
 // recordModel.js
 const db = require('../../db');
 
+function getAllLifeCategoryDetails(callback) {
+    db.query('SELECT * FROM lifecategorydetails', callback);
+}
+
 function getlifeCategoryDetails(category, callback) {
     db.query('SELECT * FROM lifecategorydetails WHERE category = ?', category, callback);
 }
@@ -21,5 +25,6 @@ module.exports = {
     getlifeCategoryDetails,
     createlifeCategoryDetails,
     updatelifeCategoryDetails,
-    deletelifeCategoryDetails
+    deletelifeCategoryDetails,
+    getAllLifeCategoryDetails 
 };

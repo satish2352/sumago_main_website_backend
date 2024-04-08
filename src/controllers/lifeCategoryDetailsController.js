@@ -25,6 +25,20 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+function getAllLifeCategoryDetailsRecord(req, res) {
+  recordModel.getAllLifeCategoryDetails((err, results) => {
+    if (err) {
+      console.error("Error fetching records:", err);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+    const modifiedResults = results.map(item => {
+      return { id: item.id, category: item.category, img: `${process.env.serverURL}${item.img}` };
+    });
+
+    res.json(modifiedResults);
+  });
+}
+
 function getlifeCategoryDetailsRecord(req, res) {
   const category = req.query.category; // Extract category from query parameters
   recordModel.getlifeCategoryDetails(category, (err, results) => {
@@ -90,5 +104,6 @@ module.exports = {
   createlifeCategoryDetailsRecord,
   updatelifeCategoryDetailsRecord,
   deletelifeCategoryDetailsRecord,
+  getAllLifeCategoryDetailsRecord,
   upload
 };

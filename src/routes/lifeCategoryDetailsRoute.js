@@ -1,15 +1,18 @@
 const express = require("express");
 const { body } = require("express-validator");
+const multer = require("multer");
 const {
   getlifeCategoryDetailsRecord,
   createlifeCategoryDetailsRecord,
   updatelifeCategoryDetailsRecord,
   deletelifeCategoryDetailsRecord,
+  getAllLifeCategoryDetailsRecord 
 } = require("../controllers/lifeCategoryDetailsController");
-const multer = require("multer");
 const { upload } = require("../controllers/lifeCategoryDetailsController"); // Specify the directory where files will be stored
 
 const router = express.Router();
+
+router.get("/find_all", getAllLifeCategoryDetailsRecord);
 
 router.get("/find", getlifeCategoryDetailsRecord);
 
