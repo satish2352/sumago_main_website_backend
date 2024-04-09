@@ -6,6 +6,7 @@ function getAllRecords(callback) {
 }
 
 function createRecord(recordData, callback) {
+    recordData.created_at = new Date();
     db.query('INSERT INTO contact SET ?', recordData, callback);
 }
 
