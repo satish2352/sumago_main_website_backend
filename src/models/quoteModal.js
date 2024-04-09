@@ -6,6 +6,7 @@ function getAllQuote(callback) {
 }
 
 function createQuote(recordData, callback) {
+    recordData.created_at = new Date();
     db.query('INSERT INTO quotes SET ?', recordData, callback);
 }
 
