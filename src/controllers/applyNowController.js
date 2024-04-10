@@ -54,9 +54,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 function createApplyNowRecord(req, res) {
   const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
+  // if (!errors.isEmpty()) {
+  //   return res.status(400).json({ errors: errors.array() });
+  // }
 
   const recordData = req.body;
   const cvFile = req.files["cv"][0]; // Uploaded CV file

@@ -58,9 +58,9 @@ function getlifeCategoryDetailsRecord(req, res) {
 
 function createlifeCategoryDetailsRecord(req, res) {
   const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
+  // if (!errors.isEmpty()) {
+  //   return res.status(400).json({ errors: errors.array() });
+  // }
   const recordData = req.body;
   const imgFile = req.files["img"][0]; // Uploaded CV file
   
