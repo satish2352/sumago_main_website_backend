@@ -1,11 +1,17 @@
-// recordsRoutes.js
 const express = require('express');
 const { body } = require('express-validator');
 const { getQuoteRecord, createQuoteRecord, updateQuoteRecord, deleteQuoteRecord } = require('../controllers/quoteController');
 
 const router = express.Router();
 
-router.get('/find', getQuoteRecord);
+router.get('/find', async (req, res) => {
+    try {
+        await getQuoteRecord(req, res);
+    } catch (error) {
+        console.error("Error in getQuoteRecord:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
 
 router.post('/create', [
     body('name').notEmpty().withMessage('Name cannot be empty'),
@@ -15,10 +21,31 @@ router.post('/create', [
     body('other_service').notEmpty().withMessage('Other_service cannot be empty'),
     body('address').notEmpty().withMessage('Address cannot be empty'),
     body('comment').notEmpty().withMessage('Comment cannot be empty')
-], createQuoteRecord);
+], async (req, res) => {
+    try {
+        await createQuoteRecord(req, res);
+    } catch (error) {
+        console.error("Error in createQuoteRecord:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
 
-router.put('/update/:id', updateQuoteRecord);
+router.put('/update/:id', async (req, res) => {
+    try {
+        await updateQuoteRecord(req, res);
+    } catch (error) {
+        console.error("Error in updateQuoteRecord:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
 
-router.delete('/delete/:id', deleteQuoteRecord);
+router.delete('/delete/:id', async (req, res) => {
+    try {
+        await deleteQuoteRecord(req, res);
+    } catch (error) {
+        console.error("Error in deleteQuoteRecord:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
 
 module.exports = router;

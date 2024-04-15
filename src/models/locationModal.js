@@ -1,20 +1,35 @@
-// recordModel.js
 const db = require('../../db');
 
 function getAllRecords(callback) {
-    db.query('SELECT * FROM location', callback);
+    try {
+        db.query('SELECT * FROM location', callback);
+    } catch (error) {
+        callback(error, null);
+    }
 }
 
 function createRecord(recordData, callback) {
-    db.query('INSERT INTO location SET ?', recordData, callback);
+    try {
+        db.query('INSERT INTO location SET ?', recordData, callback);
+    } catch (error) {
+        callback(error, null);
+    }
 }
 
 function updateRecord(id, recordData, callback) {
-    db.query('UPDATE location SET ? WHERE id = ?', [recordData, id], callback);
+    try {
+        db.query('UPDATE location SET ? WHERE id = ?', [recordData, id], callback);
+    } catch (error) {
+        callback(error, null);
+    }
 }
 
 function deleteRecord(id, callback) {
-    db.query('DELETE FROM location WHERE id = ?', id, callback);
+    try {
+        db.query('DELETE FROM location WHERE id = ?', id, callback);
+    } catch (error) {
+        callback(error, null);
+    }
 }
 
 module.exports = {

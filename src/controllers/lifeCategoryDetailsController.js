@@ -1,6 +1,6 @@
 const { validationResult } = require("express-validator");
 const path = require("path");
-const fs = require("fs")
+const fs = require("fs");
 const recordModel = require("../models/lifeCategoryDetailsmodal");
 const multer = require("multer");
 const env = require("dotenv").config();
@@ -26,77 +26,110 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 function getAllLifeCategoryDetailsRecord(req, res) {
-  recordModel.getAllLifeCategoryDetails((err, results) => {
-    if (err) {
-      console.error("Error fetching records:", err);
-      return res.status(500).json({ error: "Internal Server Error" });
-    }
-    const modifiedResults = results.map(item => {
-      return { id: item.id, category: item.category, img: `${process.env.serverURL}${item.img}` };
-    });
+  try {
+    recordModel.getAllLifeCategoryDetails((err, results) => {
+      if (err) {
+        console.error("Error fetching records:", err);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+      const modifiedResults = results.map((item) => {
+        return {
+          id: item.id,
+          category: item.category,
+          img: `${process.env.serverURL}${item.img}`,
+        };
+      });
 
-    res.json(modifiedResults);
-  });
+      res.json(modifiedResults);
+    });
+  } catch (error) {
+    console.error("Error in getAllLifeCategoryDetailsRecord:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 }
 
 function getlifeCategoryDetailsRecord(req, res) {
-  const category = req.query.category; // Extract category from query parameters
-  recordModel.getlifeCategoryDetails(category, (err, results) => {
-    if (err) {
-      console.error("Error fetching records:", err);
-      return res.status(500).json({ error: "Internal Server Error" });
-    }
-    const modifiedResults = results.map(item => {
-      // Add a new property called 'modified' with value true
-      return { id: item.id, category: item.category, img: `${process.env.serverURL}${item.img}` };
-    });
+  try {
+    const category = req.query.category; // Extract category from query parameters
+    recordModel.getlifeCategoryDetails(category, (err, results) => {
+      if (err) {
+        console.error("Error fetching records:", err);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+      const modifiedResults = results.map((item) => {
+        // Add a new property called 'modified' with value true
+        return {
+          id: item.id,
+          category: item.category,
+          img: `${process.env.serverURL}${item.img}`,
+        };
+      });
 
-    // Send the modified data as response
-    res.json(modifiedResults);
-  });
+      // Send the modified data as response
+      res.json(modifiedResults);
+    });
+  } catch (error) {
+    console.error("Error in getlifeCategoryDetailsRecord:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 }
 
 function createlifeCategoryDetailsRecord(req, res) {
-  const errors = validationResult(req);
-  // if (!errors.isEmpty()) {
-  //   return res.status(400).json({ errors: errors.array() });
-  // }
-  const recordData = req.body;
-  const imgFile = req.files["img"][0]; // Uploaded CV file
-  
-  recordData.img = imgFile.originalname
-  recordModel.createlifeCategoryDetails(recordData, (err, result) => {
-    if (err) {
-      console.error("Error creating record:", err);
-      return res.status(500).json({ error: "Internal Server Error" });
-    }
-    res
-      .status(201)
-      .json({ message: "Record created successfully", result: recordData });
-  });
+  try {
+    const errors = validationResult(req);
+    // if (!errors.isEmpty()) {
+    //   return res.status(400).json({ errors: errors.array() });
+    // }
+    const recordData = req.body;
+    const imgFile = req.files["img"][0]; // Uploaded CV file
+
+    recordData.img = imgFile.originalname;
+    recordModel.createlifeCategoryDetails(recordData, (err, result) => {
+      if (err) {
+        console.error("Error creating record:", err);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+      res
+        .status(201)
+        .json({ message: "Record created successfully", result: recordData });
+    });
+  } catch (error) {
+    console.error("Error in createlifeCategoryDetailsRecord:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 }
 
 function updatelifeCategoryDetailsRecord(req, res) {
-  const { id } = req.params;
-  const recordData = req.body;
-  recordModel.updatelifeCategoryDetails(id, recordData, (err, result) => {
-    if (err) {
-      console.error("Error updating record:", err);
-      return res.status(500).json({ error: "Internal Server Error" });
-    }
-    res.send("Record updated successfully");
-  });
+  try {
+    const { id } = req.params;
+    const recordData = req.body;
+    recordModel.updatelifeCategoryDetails(id, recordData, (err, result) => {
+      if (err) {
+        console.error("Error updating record:", err);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+      res.send("Record updated successfully");
+    });
+  } catch (error) {
+    console.error("Error in updatelifeCategoryDetailsRecord:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 }
 
 function deletelifeCategoryDetailsRecord(req, res) {
-  const { id } = req.params;
-  recordModel.deletelifeCategoryDetails(id, (err, result) => {
-    if (err) {
-      console.error("Error deleting record:", err);
-      return res.status(500).json({ error: "Internal Server Error" });
-    }
-    res.send("Record deleted successfully");
-  });
+  try {
+    const { id } = req.params;
+    recordModel.deletelifeCategoryDetails(id, (err, result) => {
+      if (err) {
+        console.error("Error deleting record:", err);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+      res.send("Record deleted successfully");
+    });
+  } catch (error) {
+    console.error("Error in deletelifeCategoryDetailsRecord:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 }
 
 module.exports = {
@@ -105,5 +138,5 @@ module.exports = {
   updatelifeCategoryDetailsRecord,
   deletelifeCategoryDetailsRecord,
   getAllLifeCategoryDetailsRecord,
-  upload
+  upload,
 };

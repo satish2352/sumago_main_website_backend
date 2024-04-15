@@ -2,11 +2,17 @@ const express = require('express');
 const { body } = require('express-validator');
 const { getApplyNowRecord, createApplyNowRecord, updateApplyNowRecord, deleteApplyNowRecord } = require('../controllers/applyNowController');
 const multer = require('multer');
-// const upload = multer({ dest: 'uploads/' }); // Specify the directory where files will be stored
 const { upload } = require("../controllers/applyNowController");
 const router = express.Router();
 
-router.get('/find', getApplyNowRecord);
+router.get('/find', async (req, res) => {
+    try {
+        await getApplyNowRecord(req, res);
+    } catch (error) {
+        console.error("Error in getApplyNowRecord:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
 
 router.post('/create', 
     upload.fields([{ name: 'cv', maxCount: 1 }, { name: 'cover_letter', maxCount: 1 }]), 
@@ -24,10 +30,32 @@ router.post('/create',
         body('phone').notEmpty().withMessage('Phone cannot be empty').isLength({ min: 10, max: 10 }).withMessage('Phone must be 10 digits long'),
         body('address').notEmpty().withMessage('Address cannot be empty')
     ], 
-    createApplyNowRecord);
+    async (req, res) => {
+        try {
+            await createApplyNowRecord(req, res);
+        } catch (error) {
+            console.error("Error in createApplyNowRecord:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+);
 
-router.put('/update/:id', updateApplyNowRecord);
+router.put('/update/:id', async (req, res) => {
+    try {
+        await updateApplyNowRecord(req, res);
+    } catch (error) {
+        console.error("Error in updateApplyNowRecord:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
 
-router.delete('/delete/:id', deleteApplyNowRecord);
+router.delete('/delete/:id', async (req, res) => {
+    try {
+        await deleteApplyNowRecord(req, res);
+    } catch (error) {
+        console.error("Error in deleteApplyNowRecord:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
 
 module.exports = router;

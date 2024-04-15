@@ -1,3 +1,4 @@
+// recordsController.js
 const { validationResult } = require("express-validator");
 const path = require("path");
 const fs = require("fs");
@@ -26,85 +27,88 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 function gettestimonialsRecord(req, res) {
-  recordModel.gettestimonials((err, results) => {
-    if (err) {
-      console.error("Error fetching records:", err);
-      return res.status(500).json({ error: "Internal Server Error" });
-    }
-    const modifiedResults = results.map((item) => {
-      // Add a new property called 'modified' with value true
-      return {
-        id: item.id,
-        name: item.name,
-        designation: item.designation,
-        review: item.review,
-        img: `${process.env.serverURL}${item.img}`,
-      };
+  try {
+    recordModel.gettestimonials((err, results) => {
+      if (err) {
+        console.error("Error fetching records:", err);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+      const modifiedResults = results.map((item) => {
+        // Add a new property called 'modified' with value true
+        return {
+          id: item.id,
+          name: item.name,
+          designation: item.designation,
+          review: item.review,
+          img: `${process.env.serverURL}${item.img}`,
+        };
+      });
+
+      // Send the modified data as response
+      res.json(modifiedResults);
     });
-
-    // Send the modified data as response
-    res.json(modifiedResults);
-  });
+  } catch (error) {
+    console.error("Error in gettestimonialsRecord:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 }
-// function gettestimonialsRecord(req, res) {
-//   recordModel.gettestimonials((err, results) => {
-//     if (err) {
-//       console.error("Error fetching records:", err);
-//       return res.status(500).json({ error: "Internal Server Error" });
-//     }
-
-//     const modifiedResults = results.map(item => {
-//       console.log("result", item);
-//       // Add a new property called 'modified' with value true
-//       return { id: item.id, review: item.review, img: `${process.env.serverURL}${item.img}`, designation: item.designation };
-//     });
-
-//     // Send the modified data as response
-//     res.json(modifiedResults);
-//   });
-// }
 
 function createtestimonialsRecord(req, res) {
-  const errors = validationResult(req);
-  // if (!errors.isEmpty()) {
-  //   return res.status(400).json({ errors: errors.array() });
-  // }
-  const recordData = req.body;
-  const imgFile = req.files["img"][0]; // Uploaded CV file
+  try {
+    const errors = validationResult(req);
+    // if (!errors.isEmpty()) {
+    //   return res.status(400).json({ errors: errors.array() });
+    // }
+    const recordData = req.body;
+    const imgFile = req.files["img"][0]; // Uploaded CV file
 
-  recordData.img = imgFile.originalname;
-  recordModel.createtestimonials(recordData, (err, result) => {
-    if (err) {
-      console.error("Error creating record:", err);
-      return res.status(500).json({ error: "Internal Server Error" });
-    }
-    res
-      .status(201)
-      .json({ message: "Record created successfully", result: recordData });
-  });
+    recordData.img = imgFile.originalname;
+    recordModel.createtestimonials(recordData, (err, result) => {
+      if (err) {
+        console.error("Error creating record:", err);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+      res
+        .status(201)
+        .json({ message: "Record created successfully", result: recordData });
+    });
+  } catch (error) {
+    console.error("Error in createtestimonialsRecord:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 }
 
 function updatetestimonialsRecord(req, res) {
-  const { id } = req.params;
-  const recordData = req.body;
-  recordModel.updatetestimonials(id, recordData, (err, result) => {
-    if (err) {
-      console.error("Error updating record:", err);
-      return res.status(500).json({ error: "Internal Server Error" });
-    }
-    res.send("Record updated successfully");
-  });
+  try {
+    const { id } = req.params;
+    const recordData = req.body;
+    recordModel.updatetestimonials(id, recordData, (err, result) => {
+      if (err) {
+        console.error("Error updating record:", err);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+      res.send("Record updated successfully");
+    });
+  } catch (error) {
+    console.error("Error in updatetestimonialsRecord:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 }
 
 function deletetestimonialsRecord(req, res) {
-  const { id } = req.params;
-  recordModel.deletetestimonials(id, (err, result) => {
-    if (err) {
-      console.error("Error deleting record:", err);
-      return res.status(500).json({ error: "Internal Server Error" });
-    }
-    res.send("Record deleted successfully");
-  });
+  try {
+    const { id } = req.params;
+    recordModel.deletetestimonials(id, (err, result) => {
+      if (err) {
+        console.error("Error deleting record:", err);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+      res.send("Record deleted successfully");
+    });
+  } catch (error) {
+    console.error("Error in deletetestimonialsRecord:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 }
 
 module.exports = {

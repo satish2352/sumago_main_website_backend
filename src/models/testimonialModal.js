@@ -1,20 +1,35 @@
-// recordModel.js
 const db = require('../../db');
 
 function gettestimonials(callback) {
-    db.query('SELECT * FROM testimonials', callback);
+    try {
+        db.query('SELECT * FROM testimonials', callback);
+    } catch (error) {
+        callback(error, null);
+    }
 }
 
 function createtestimonials(recordData, callback) {
-    db.query('INSERT INTO testimonials SET ?', recordData, callback);
+    try {
+        db.query('INSERT INTO testimonials SET ?', recordData, callback);
+    } catch (error) {
+        callback(error, null);
+    }
 }
 
 function updatetestimonials(id, recordData, callback) {
-    db.query('UPDATE testimonials SET ? WHERE id = ?', [recordData, id], callback);
+    try {
+        db.query('UPDATE testimonials SET ? WHERE id = ?', [recordData, id], callback);
+    } catch (error) {
+        callback(error, null);
+    }
 }
 
 function deletetestimonials(id, callback) {
-    db.query('DELETE FROM testimonials WHERE id = ?', id, callback);
+    try {
+        db.query('DELETE FROM testimonials WHERE id = ?', id, callback);
+    } catch (error) {
+        callback(error, null);
+    }
 }
 
 module.exports = {

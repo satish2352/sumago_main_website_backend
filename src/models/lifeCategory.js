@@ -1,20 +1,35 @@
-// recordModel.js
 const db = require('../../db');
 
 function getAllRecords(callback) {
-    db.query('SELECT * FROM lifecategory', callback);
+    try {
+        db.query('SELECT * FROM lifecategory', callback);
+    } catch (error) {
+        callback(error, null);
+    }
 }
 
 function createRecord(recordData, callback) {
-    db.query('INSERT INTO lifecategory SET ?', recordData, callback);
+    try {
+        db.query('INSERT INTO lifecategory SET ?', recordData, callback);
+    } catch (error) {
+        callback(error, null);
+    }
 }
 
 function updateRecord(id, recordData, callback) {
-    db.query('UPDATE lifecategory SET ? WHERE id = ?', [recordData, id], callback);
+    try {
+        db.query('UPDATE lifecategory SET ? WHERE id = ?', [recordData, id], callback);
+    } catch (error) {
+        callback(error, null);
+    }
 }
 
 function deleteRecord(id, callback) {
-    db.query('DELETE FROM lifecategory WHERE id = ?', id, callback);
+    try {
+        db.query('DELETE FROM lifecategory WHERE id = ?', id, callback);
+    } catch (error) {
+        callback(error, null);
+    }
 }
 
 module.exports = {

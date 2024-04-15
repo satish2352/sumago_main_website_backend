@@ -1,21 +1,36 @@
-// recordModel.js
 const db = require('../../db');
 
 function getAllRecords(callback) {
-    db.query('SELECT * FROM contact', callback);
+    try {
+        db.query('SELECT * FROM contact', callback);
+    } catch (error) {
+        callback(error, null);
+    }
 }
 
 function createRecord(recordData, callback) {
-    recordData.created_at = new Date();
-    db.query('INSERT INTO contact SET ?', recordData, callback);
+    try {
+        recordData.created_at = new Date();
+        db.query('INSERT INTO contact SET ?', recordData, callback);
+    } catch (error) {
+        callback(error, null);
+    }
 }
 
 function updateRecord(id, recordData, callback) {
-    db.query('UPDATE contact SET ? WHERE id = ?', [recordData, id], callback);
+    try {
+        db.query('UPDATE contact SET ? WHERE id = ?', [recordData, id], callback);
+    } catch (error) {
+        callback(error, null);
+    }
 }
 
 function deleteRecord(id, callback) {
-    db.query('DELETE FROM contact WHERE id = ?', id, callback);
+    try {
+        db.query('DELETE FROM contact WHERE id = ?', id, callback);
+    } catch (error) {
+        callback(error, null);
+    }
 }
 
 module.exports = {

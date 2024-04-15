@@ -1,24 +1,43 @@
-// recordModel.js
 const db = require('../../db');
 
 function getAllLifeCategoryDetails(callback) {
-    db.query('SELECT * FROM lifecategorydetails', callback);
+    try {
+        db.query('SELECT * FROM lifecategorydetails', callback);
+    } catch (error) {
+        callback(error, null);
+    }
 }
 
 function getlifeCategoryDetails(category, callback) {
-    db.query('SELECT * FROM lifecategorydetails WHERE category = ?', category, callback);
+    try {
+        db.query('SELECT * FROM lifecategorydetails WHERE category = ?', category, callback);
+    } catch (error) {
+        callback(error, null);
+    }
 }
 
 function createlifeCategoryDetails(recordData, callback) {
-    db.query('INSERT INTO lifecategorydetails SET ?', recordData, callback);
+    try {
+        db.query('INSERT INTO lifecategorydetails SET ?', recordData, callback);
+    } catch (error) {
+        callback(error, null);
+    }
 }
 
 function updatelifeCategoryDetails(id, recordData, callback) {
-    db.query('UPDATE lifecategorydetails SET ? WHERE id = ?', [recordData, id], callback);
+    try {
+        db.query('UPDATE lifecategorydetails SET ? WHERE id = ?', [recordData, id], callback);
+    } catch (error) {
+        callback(error, null);
+    }
 }
 
 function deletelifeCategoryDetails(id, callback) {
-    db.query('DELETE FROM lifecategorydetails WHERE id = ?', id, callback);
+    try {
+        db.query('DELETE FROM lifecategorydetails WHERE id = ?', id, callback);
+    } catch (error) {
+        callback(error, null);
+    }
 }
 
 module.exports = {

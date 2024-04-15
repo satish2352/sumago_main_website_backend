@@ -1,20 +1,35 @@
-// recordModel.js
 const db = require('../../db');
 
 function getAllRecords(callback) {
-    db.query('SELECT * FROM jobopening', callback);
+    try {
+        db.query('SELECT * FROM jobopening', callback);
+    } catch (error) {
+        callback(error, null);
+    }
 }
 
 function createRecord(recordData, callback) {
-    db.query('INSERT INTO jobopening SET ?', recordData, callback);
+    try {
+        db.query('INSERT INTO jobopening SET ?', recordData, callback);
+    } catch (error) {
+        callback(error, null);
+    }
 }
 
 function updateRecord(id, recordData, callback) {
-    db.query('UPDATE jobopening SET ? WHERE id = ?', [recordData, id], callback);
+    try {
+        db.query('UPDATE jobopening SET ? WHERE id = ?', [recordData, id], callback);
+    } catch (error) {
+        callback(error, null);
+    }
 }
 
 function deleteRecord(id, callback) {
-    db.query('DELETE FROM jobopening WHERE id = ?', id, callback);
+    try {
+        db.query('DELETE FROM jobopening WHERE id = ?', id, callback);
+    } catch (error) {
+        callback(error, null);
+    }
 }
 
 module.exports = {
