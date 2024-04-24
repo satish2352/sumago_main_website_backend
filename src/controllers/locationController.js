@@ -3,19 +3,7 @@ const { validationResult } = require('express-validator');
 const recordModel = require('../models/locationModal');
 
 function getlocationRecords(req, res) {
-    try {
-        recordModel.getAllRecords((err, results) => {
-            if (err) {
-                console.error('Error fetching records:', err);
-                return res.status(500).json({ error: 'Internal Server Error' });
-            }
-            return res.status(200).json(results);
-            
-        });
-    } catch (error) {
-        console.error('Error in getlocationRecords:', error);
-        return res.status(500).json({ error: 'Internal Server Error' });
-    }
+    
 }
 
 function createlocationRecord(req, res) {
