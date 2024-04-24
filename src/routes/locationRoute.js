@@ -5,13 +5,14 @@ const { getlocationRecords, createlocationRecord, updatelocationRecord, deletelo
 const router = express.Router();
 
 router.get('/find', async (req, res) => {
-    // try {
-    //     await getlocationRecords(req, res);
-    // } catch (error) {
-    //     console.error("Error in getlocationRecords:", error);
-    //     res.status(500).json({ error: "Internal server error" });
-    // }
-    return res.status(200).json({status:true})
+    try {
+        //await getlocationRecords(req, res);
+
+        return res.status(200).json({status:false,message:'heyyyyyyyy'})
+    } catch (error) {
+        console.error("Error in getlocationRecords:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
 });
 
 router.post('/create', [
