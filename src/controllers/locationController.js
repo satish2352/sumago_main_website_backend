@@ -9,11 +9,12 @@ function getlocationRecords(req, res) {
                 console.error('Error fetching records:', err);
                 return res.status(500).json({ error: 'Internal Server Error' });
             }
-            res.json(results);
+            return res.status(200).json(results);
+            
         });
     } catch (error) {
         console.error('Error in getlocationRecords:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        return res.status(500).json({ error: 'Internal Server Error' });
     }
 }
 

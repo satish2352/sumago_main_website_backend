@@ -6,9 +6,9 @@ const router = express.Router();
 
 router.get('/find', async (req, res) => {
     try {
-        //await getlocationRecords(req, res);
+        await getlocationRecords(req, res);
 
-        return res.status(200).json({status:false,message:'heyyyyyyyy'})
+        // return res.status(200).json({status:false,message:'heyyyyyyyy'})
     } catch (error) {
         console.error("Error in getlocationRecords:", error);
         res.status(500).json({ error: "Internal server error" });
