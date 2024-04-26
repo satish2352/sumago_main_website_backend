@@ -4,7 +4,7 @@ const { getRecords, createRecord, updateRecord, deleteRecord } = require('../con
 
 const router = express.Router();
 
-router.get('/records', async (req, res) => {
+router.get('/getrecords', async (req, res) => {
     try {
         await getRecords(req, res);
     } catch (error) {
@@ -12,7 +12,6 @@ router.get('/records', async (req, res) => {
         res.status(500).json({ error: "Internal server error" });
     }
 });
-
 router.post('/records', [
     body('name').notEmpty().withMessage('Name cannot be empty'),
     body('email').isEmail().withMessage('Invalid email format'),
