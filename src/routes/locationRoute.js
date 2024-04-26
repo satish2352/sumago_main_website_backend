@@ -14,6 +14,7 @@ router.get('/find', async (req, res) => {
     //     console.error("Error in getlocationRecords:", error);
     //     res.status(500).json({ error: "Internal server error" });
     // }
+    
     try {
         recordModel.getAllRecords((err, results) => {
             if (err) {
