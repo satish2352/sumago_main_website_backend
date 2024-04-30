@@ -4,29 +4,12 @@ const { getlocationRecords, createlocationRecord, updatelocationRecord, deletelo
 
 const router = express.Router();
 
-router.get('/find', async (req, res) => {
-    // try {
-    //     // await getlocationRecords(req, res);
-
-
-    //     // return res.status(200).json({status:false,message:'heyyyyyyyy'})
-    // } catch (error) {
-    //     console.error("Error in getlocationRecords:", error);
-    //     res.status(500).json({ error: "Internal server error" });
-    // }
-    
+router.get('/getlocationRecords', async (req, res) => {
     try {
-        recordModel.getAllRecords((err, results) => {
-            if (err) {
-                console.error('Error fetching records:', err);
-                return res.status(500).json({ error: 'Internal Server Error' });
-            }
-            return res.status(200).json(results);
-            
-        });
+        await getlocationRecords(req, res);
     } catch (error) {
-        console.error('Error in getlocationRecords:', error);
-        return res.status(500).json({ error: 'Internal Server Error' });
+        console.error("Error in getLifeCategoryRecords:", error);
+        res.status(500).json({ error: "Internal server error" });
     }
 });
 

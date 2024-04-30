@@ -3,16 +3,23 @@ const { validationResult } = require('express-validator');
 const recordModel = require('../models/locationModal');
 
 function getlocationRecords(req, res) {
-    
+    try {
+        recordModel.getAllRecords((err, results) => {
+            if (err) {
+                console.error('Error fetching records:', err);
+                return res.status(500).json({ error: 'Internal Server Error' });
+            }
+            res.json(results);
+        });
+    } catch (error) {
+        console.error('Error in getlocationRecords:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
 }
 
 function createlocationRecord(req, res) {
     try {
         const errors = validationResult(req);
-        // if (!errors.isEmpty()) {
-        //     return res.status(400).json({ errors: errors.array() });
-        // }
-
         const recordData = req.body;
         recordModel.createRecord(recordData, (err, result) => {
             if (err) {
@@ -61,8 +68,5 @@ function deletelocationRecord(req, res) {
 }
 
 module.exports = {
-    getlocationRecords,
-    createlocationRecord,
-    updatelocationRecord,
-    deletelocationRecord
+    getlocationRecords, createlocationRecord, updatelocationRecord, deletelocationRecord
 };

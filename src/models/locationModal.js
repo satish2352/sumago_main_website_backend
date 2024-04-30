@@ -3,7 +3,6 @@ const db = require('../../db');
 function getAllRecords(callback) {
     try {
         db.query('SELECT * FROM location', callback);
-        next()
     } catch (error) {
         callback(error, null);
     }
