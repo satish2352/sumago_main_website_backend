@@ -1,5 +1,6 @@
 const userModel = require('../models/userModel');
-
+const jwt = require('jsonwebtoken');
+const env = require("dotenv").config();
 function loginUser(req, res) {
   try {
     const { email, password } = req.body;
@@ -14,7 +15,8 @@ function loginUser(req, res) {
         } else {
           const user = results[0];
           if (user.password === password) {
-            res.status(200).json({ message: 'Login successful' });
+            const token = jwt.sign({ email: user.email }, process.env.JWT_Secret_Key, { expiresIn: '1h' }); // Change 'your_secret_key' to your own secret key
+            res.status(200).json({ message: 'Login successful', token: token });
           } else {
             res.status(401).json({ message: 'Incorrect password' });
           }

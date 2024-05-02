@@ -1,6 +1,7 @@
 const express = require('express');
 const { body } = require('express-validator');
 const { getlocationRecords, createlocationRecord, updatelocationRecord, deletelocationRecord } = require('../controllers/locationController');
+const verifyToken = require('../JWT/auth');
 
 const router = express.Router();
 
@@ -12,8 +13,16 @@ router.get('/getlocationRecords', async (req, res) => {
         res.status(500).json({ error: "Internal server error" });
     }
 });
+router.get('/getlocation', verifyToken, async (req, res) => {
+    try {
+        await getlocationRecords(req, res);
+    } catch (error) {
+        console.error("Error in getLifeCategoryRecords:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
 
-router.post('/create', [
+router.post('/create', verifyToken, [
     body('address').notEmpty().withMessage('Address cannot be empty'),
     body('email').isEmail().withMessage('Invalid email format'),
     body('contact').notEmpty().withMessage('Contact cannot be empty'),
@@ -27,7 +36,7 @@ router.post('/create', [
     }
 });
 
-router.put('/update/:id', async (req, res) => {
+router.put('/update/:id', verifyToken, async (req, res) => {
     try {
         await updatelocationRecord(req, res);
     } catch (error) {
@@ -36,7 +45,7 @@ router.put('/update/:id', async (req, res) => {
     }
 });
 
-router.delete('/delete/:id', async (req, res) => {
+router.delete('/delete/:id', verifyToken, async (req, res) => {
     try {
         await deletelocationRecord(req, res);
     } catch (error) {
