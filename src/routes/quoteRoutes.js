@@ -1,10 +1,19 @@
 const express = require('express');
 const { body } = require('express-validator');
 const { getQuoteRecord, createQuoteRecord, updateQuoteRecord, deleteQuoteRecord } = require('../controllers/quoteController');
+const verifyToken = require('../JWT/auth');
 
 const router = express.Router();
 
 router.get('/find', async (req, res) => {
+    try {
+        await getQuoteRecord(req, res);
+    } catch (error) {
+        console.error("Error in getQuoteRecord:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+router.get('/getQuote', verifyToken, async (req, res) => {
     try {
         await getQuoteRecord(req, res);
     } catch (error) {
