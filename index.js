@@ -31,6 +31,8 @@ try {
   app.use("/testimonials", testimonialsRoutes);
   const clientCountRoutes = require("./src/routes/clientCountRouters");
   app.use("/clientCount", clientCountRoutes);
+  const teamRoutes = require("./src/routes/TeamRoutes");
+  app.use("/team", teamRoutes);
   const loginRoutes = require("./src/routes/userRoutes");
   app.use("/auth", loginRoutes);
 } catch (error) {
