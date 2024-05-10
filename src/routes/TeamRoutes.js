@@ -24,6 +24,7 @@ router.post('/createteamRecord',
     upload.fields([{ name: 'img', maxCount: 1 }]),
     [
         body('name').notEmpty().withMessage('Name cannot be empty'),
+        body('fullname').notEmpty().withMessage('fullName cannot be empty'),
         body('designation').notEmpty().withMessage('Designation cannot be empty')
     ],
     async (req, res) => {
