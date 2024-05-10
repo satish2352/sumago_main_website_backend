@@ -33,8 +33,8 @@ try {
   app.use("/clientCount", clientCountRoutes);
   const teamRoutes = require("./src/routes/TeamRoutes");
   app.use("/team", teamRoutes);
-  const appreciationRoutes = require("./src/routes/AppreciationRoute");
-  app.use("/appreciation", appreciationRoutes);
+  // const appreciationRoutes = require("./src/routes/AppreciationRoute");
+  // app.use("/appreciation", appreciationRoutes);
   const loginRoutes = require("./src/routes/userRoutes");
   app.use("/auth", loginRoutes);
 } catch (error) {
