@@ -35,6 +35,8 @@ try {
   app.use("/team", teamRoutes);
   const appreciationRoutes = require("./src/routes/AppreciationRoute");
   app.use("/appreciation", appreciationRoutes);
+  const broucherDownloadRoutes = require("./src/routes/broucherFormRoute");
+  app.use("/broucherDownload", broucherDownloadRoutes);
   const loginRoutes = require("./src/routes/userRoutes");
   app.use("/auth", loginRoutes);
 } catch (error) {
