@@ -38,13 +38,15 @@ router.post('/createteamRecord',
 );
 
 
-router.put("/updateteamRecord/:id", async (req, res) => {
-    try {
-        await updateteamRecord(req, res);
-    } catch (error) {
-        console.error("Error in updateteamRecord:", error);
-        res.status(500).json({ error: "Internal server error" });
-    }
+router.put("/updateteamRecord/:id", 
+  upload.fields([{ name: 'img', maxCount: 1 }]), 
+  async (req, res) => {
+  try {
+    await updateteamRecord(req, res);
+  } catch (error) {
+    console.error("Error in updateteamRecord:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 router.delete("/deleteteamRecord/:id", async (req, res) => {

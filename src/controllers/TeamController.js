@@ -82,12 +82,18 @@ function updateteamRecord(req, res) {
   try {
     const { id } = req.params;
     const recordData = req.body;
+
+    if (req.files && req.files["img"]) {
+      const imgFile = req.files["img"][0];
+      recordData.img = imgFile.originalname;
+    }
+
     recordModel.updateteam(id, recordData, (err, result) => {
       if (err) {
         console.error("Error updating record:", err);
         return res.status(500).json({ error: "Internal Server Error" });
       }
-      res.send("Record updated successfully");
+      res.json({ message: "Record updated successfully" });
     });
   } catch (error) {
     console.error("Error in updateteamRecord:", error);

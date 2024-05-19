@@ -17,11 +17,12 @@ function createteam(recordData, callback) {
 }
 
 function updateteam(id, recordData, callback) {
-    try {
-        db.query('UPDATE team SET ? WHERE id = ?', [recordData, id], callback);
-    } catch (error) {
-        callback(error, null);
+    if (Object.keys(recordData).length === 0) {
+        return callback(new Error('No data provided to update'), null);
     }
+
+    const query = 'UPDATE team SET ? WHERE id = ?';
+    db.query(query, [recordData, id], callback);
 }
 
 function deleteteam(id, callback) {
