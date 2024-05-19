@@ -45,7 +45,9 @@ router.post('/createCultureDetails',
     }
 );
 
-router.put("/update/:id", async (req, res) => {
+router.put("/update/:id", 
+    upload.fields([{ name: 'img', maxCount: 1 }]), 
+    async (req, res) => {
     try {
         await updateCultureCategoryDetailsRecord(req, res);
     } catch (error) {

@@ -25,11 +25,12 @@ function createCultureCategoryDetails(recordData, callback) {
 }
 
 function updateCultureCategoryDetails(id, recordData, callback) {
-    try {
-        db.query('UPDATE culturecategorydetails SET ? WHERE id = ?', [recordData, id], callback);
-    } catch (error) {
-        callback(error, null);
+    if (Object.keys(recordData).length === 0) {
+        return callback(new Error('No data provided to update'), null);
     }
+
+    const query = 'UPDATE culturecategorydetails SET ? WHERE id = ?';
+    db.query(query, [recordData, id], callback);
 }
 
 function deleteCultureCategoryDetails(id, callback) {
