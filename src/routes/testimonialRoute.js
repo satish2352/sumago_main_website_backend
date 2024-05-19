@@ -38,14 +38,17 @@ router.post('/create',
 );
 
 
-router.put("/update/:id", async (req, res) => {
-    try {
-        await updatetestimonialsRecord(req, res);
-    } catch (error) {
-        console.error("Error in updatetestimonialsRecord:", error);
-        res.status(500).json({ error: "Internal server error" });
+router.put("/update/:id",
+    upload.fields([{ name: 'img', maxCount: 1 }]),
+    async (req, res) => {
+        try {
+            await updatetestimonialsRecord(req, res);
+        } catch (error) {
+            console.error("Error in updatetestimonialsRecord:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
     }
-});
+);
 
 router.delete("/delete/:id", async (req, res) => {
     try {

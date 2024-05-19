@@ -17,11 +17,12 @@ function createtestimonials(recordData, callback) {
 }
 
 function updatetestimonials(id, recordData, callback) {
-    try {
-        db.query('UPDATE testimonials SET ? WHERE id = ?', [recordData, id], callback);
-    } catch (error) {
-        callback(error, null);
+    if (Object.keys(recordData).length === 0) {
+        return callback(new Error('No data provided to update'), null);
     }
+
+    const query = 'UPDATE testimonials SET ? WHERE id = ?';
+    db.query(query, [recordData, id], callback);
 }
 
 function deletetestimonials(id, callback) {
