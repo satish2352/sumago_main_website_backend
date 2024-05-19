@@ -23,6 +23,10 @@ try {
   app.use("/life_category", LifeCategoryRoutes);
   const lifeCategoryDetailsRoutes = require("./src/routes/lifeCategoryDetailsRoute");
   app.use("/life_category_details", lifeCategoryDetailsRoutes);
+  const CultureCategoryRoutes = require("./src/routes/cultureCategoryRoutes");
+  app.use("/culture_category", CultureCategoryRoutes);
+  const cultureCategoryDetailsRoutes = require("./src/routes/cultureCategoryDetailsRoute");
+  app.use("/culture_category_details", cultureCategoryDetailsRoutes);
   const jobOpeningRoutes = require("./src/routes/jobOpeningRoutes");
   app.use("/jobs", jobOpeningRoutes);
   const internshipOpeningRoutes = require("./src/routes/internshipOpeningRoutes");
