@@ -21,8 +21,13 @@ function updateteam(id, recordData, callback) {
         return callback(new Error('No data provided to update'), null);
     }
 
-    const query = 'UPDATE team SET ? WHERE id = ?';
-    db.query(query, [recordData, id], callback);
+    const fields = Object.keys(recordData).map(field => `${field} = ?`).join(', ');
+    const values = Object.values(recordData);
+    values.push(id);
+
+    const query = `UPDATE team SET ${fields} WHERE id = ?`;
+
+    db.query(query, values, callback);
 }
 
 function deleteteam(id, callback) {
