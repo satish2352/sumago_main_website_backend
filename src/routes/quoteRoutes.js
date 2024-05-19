@@ -39,7 +39,7 @@ router.post('/create', [
     }
 });
 
-router.put('/update/:id', async (req, res) => {
+router.put('/update/:id', verifyToken, async (req, res) => {
     try {
         await updateQuoteRecord(req, res);
     } catch (error) {
@@ -48,7 +48,7 @@ router.put('/update/:id', async (req, res) => {
     }
 });
 
-router.delete('/delete/:id', async (req, res) => {
+router.delete('/delete/:id', verifyToken, async (req, res) => {
     try {
         await deleteQuoteRecord(req, res);
     } catch (error) {

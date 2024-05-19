@@ -1,10 +1,19 @@
 const express = require('express');
 const { body } = require('express-validator');
 const { getRecords, createRecord, updateRecord, deleteRecord } = require('../controllers/jobOpeningController');
+const verifyToken = require('../JWT/auth');
 
 const router = express.Router();
 
-router.get('/find', async (req, res) => {
+router.get('/find', verifyToken, async (req, res) => {
+    try {
+        await getRecords(req, res);
+    } catch (error) {
+        console.error("Error in getRecords:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+router.get('/getJobRecord', async (req, res) => {
     try {
         await getRecords(req, res);
     } catch (error) {
@@ -13,7 +22,7 @@ router.get('/find', async (req, res) => {
     }
 });
 
-router.post('/create', [
+router.post('/create', verifyToken, [
     body('designation').notEmpty(),
     body('opening').notEmpty(),
     body('location').notEmpty(),
@@ -27,7 +36,7 @@ router.post('/create', [
     }
 });
 
-router.put('/update/:id', async (req, res) => {
+router.put('/update/:id', verifyToken, async (req, res) => {
     try {
         await updateRecord(req, res);
     } catch (error) {
@@ -36,7 +45,7 @@ router.put('/update/:id', async (req, res) => {
     }
 });
 
-router.delete('/delete/:id', async (req, res) => {
+router.delete('/delete/:id',verifyToken, async (req, res) => {
     try {
         await deleteRecord(req, res);
     } catch (error) {

@@ -1,10 +1,19 @@
 const express = require('express');
 const { body } = require('express-validator');
 const { getLifeCategoryRecords, createLifeCategoryRecord, updateLifeCategoryRecord, deleteLifeCategoryRecord } = require('../controllers/lifeCategoryController');
+const verifyToken = require('../JWT/auth');
 
 const router = express.Router();
 
-router.get('/find', async (req, res) => {
+router.get('/find', verifyToken, async (req, res) => {
+    try {
+        await getLifeCategoryRecords(req, res);
+    } catch (error) {
+        console.error("Error in getLifeCategoryRecords:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+router.get('/getLifeCategory', async (req, res) => {
     try {
         await getLifeCategoryRecords(req, res);
     } catch (error) {
@@ -13,7 +22,7 @@ router.get('/find', async (req, res) => {
     }
 });
 
-router.post('/create', [
+router.post('/create', verifyToken, [
     body('category').notEmpty().withMessage('Category cannot be empty'),
 ], async (req, res) => {
     try {
@@ -24,7 +33,7 @@ router.post('/create', [
     }
 });
 
-router.put('/update/:id', async (req, res) => {
+router.put('/update/:id', verifyToken, async (req, res) => {
     try {
         await updateLifeCategoryRecord(req, res);
     } catch (error) {
@@ -33,7 +42,7 @@ router.put('/update/:id', async (req, res) => {
     }
 });
 
-router.delete('/delete/:id', async (req, res) => {
+router.delete('/delete/:id', verifyToken, async (req, res) => {
     try {
         await deleteLifeCategoryRecord(req, res);
     } catch (error) {

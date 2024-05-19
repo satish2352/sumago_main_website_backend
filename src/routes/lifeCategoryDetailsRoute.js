@@ -9,10 +9,11 @@ const {
   getAllLifeCategoryDetailsRecord 
 } = require("../controllers/lifeCategoryDetailsController");
 const { upload } = require("../controllers/lifeCategoryDetailsController");
+const verifyToken = require("../JWT/auth");
 
 const router = express.Router();
 
-router.get("/find_all", async (req, res) => {
+router.get("/find_all", verifyToken, async (req, res) => {
     try {
         await getAllLifeCategoryDetailsRecord(req, res);
     } catch (error) {
@@ -21,7 +22,24 @@ router.get("/find_all", async (req, res) => {
     }
 });
 
-router.get("/find", async (req, res) => {
+router.get("/find", verifyToken, async (req, res) => {
+    try {
+        await getlifeCategoryDetailsRecord(req, res);
+    } catch (error) {
+        console.error("Error in getlifeCategoryDetailsRecord:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+router.get("/getAllLifeCategoryDetailsRecord", async (req, res) => {
+    try {
+        await getAllLifeCategoryDetailsRecord(req, res);
+    } catch (error) {
+        console.error("Error in getAllLifeCategoryDetailsRecord:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+router.get("/getlifeCategoryDetailsRecord", async (req, res) => {
     try {
         await getlifeCategoryDetailsRecord(req, res);
     } catch (error) {
@@ -30,7 +48,7 @@ router.get("/find", async (req, res) => {
     }
 });
 
-router.post('/create',
+router.post('/create',verifyToken,
     upload.fields([{ name: 'img', maxCount: 1 }]),
     [
         body('category').notEmpty().withMessage('Category cannot be empty')
@@ -45,7 +63,7 @@ router.post('/create',
     }
 );
 
-router.put("/update/:id", async (req, res) => {
+router.put("/update/:id", verifyToken, async (req, res) => {
     try {
         await updatelifeCategoryDetailsRecord(req, res);
     } catch (error) {
@@ -54,7 +72,7 @@ router.put("/update/:id", async (req, res) => {
     }
 });
 
-router.delete("/delete/:id", async (req, res) => {
+router.delete("/delete/:id", verifyToken, async (req, res) => {
     try {
         await deletelifeCategoryDetailsRecord(req, res);
     } catch (error) {

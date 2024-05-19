@@ -8,10 +8,19 @@ const {
 } = require("../controllers/TeamController");
 const multer = require("multer");
 const { upload } = require("../controllers/TeamController");
+const verifyToken = require("../JWT/auth");
 
 const router = express.Router();
 
-router.get("/getteamRecord", async (req, res) => {
+router.get("/getteamRecord", verifyToken, async (req, res) => {
+    try {
+        await getteamRecord(req, res);
+    } catch (error) {
+        console.error("Error in getteamRecord:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+router.get("/getteam", async (req, res) => {
     try {
         await getteamRecord(req, res);
     } catch (error) {
@@ -20,7 +29,7 @@ router.get("/getteamRecord", async (req, res) => {
     }
 });
 
-router.post('/createteamRecord',
+router.post('/createteamRecord', verifyToken,
     upload.fields([{ name: 'img', maxCount: 1 }]),
     [
         body('id').notEmpty().withMessage('id cannot be empty'),
@@ -39,7 +48,7 @@ router.post('/createteamRecord',
 );
 
 
-router.put("/updateteamRecord/:id", 
+router.put("/updateteamRecord/:id", verifyToken,
   upload.fields([{ name: 'img', maxCount: 1 }]), 
   async (req, res) => {
   try {
@@ -50,7 +59,7 @@ router.put("/updateteamRecord/:id",
   }
 });
 
-router.delete("/deleteteamRecord/:id", async (req, res) => {
+router.delete("/deleteteamRecord/:id", verifyToken, async (req, res) => {
     try {
         await deleteteamRecord(req, res);
     } catch (error) {

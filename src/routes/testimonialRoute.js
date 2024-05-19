@@ -8,10 +8,19 @@ const {
 } = require("../controllers/testimonialController");
 const multer = require("multer");
 const { upload } = require("../controllers/testimonialController");
+const verifyToken = require("../JWT/auth");
 
 const router = express.Router();
 
-router.get("/find", async (req, res) => {
+router.get("/find", verifyToken, async (req, res) => {
+    try {
+        await gettestimonialsRecord(req, res);
+    } catch (error) {
+        console.error("Error in gettestimonialsRecord:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+router.get("/getTestimonials", async (req, res) => {
     try {
         await gettestimonialsRecord(req, res);
     } catch (error) {
@@ -20,7 +29,7 @@ router.get("/find", async (req, res) => {
     }
 });
 
-router.post('/create',
+router.post('/create', verifyToken,
     upload.fields([{ name: 'img', maxCount: 1 }]),
     [
         body('name').notEmpty().withMessage('Name cannot be empty'),
@@ -38,7 +47,7 @@ router.post('/create',
 );
 
 
-router.put("/update/:id",
+router.put("/update/:id", verifyToken,
     upload.fields([{ name: 'img', maxCount: 1 }]),
     async (req, res) => {
         try {
@@ -50,7 +59,7 @@ router.put("/update/:id",
     }
 );
 
-router.delete("/delete/:id", async (req, res) => {
+router.delete("/delete/:id", verifyToken, async (req, res) => {
     try {
         await deletetestimonialsRecord(req, res);
     } catch (error) {

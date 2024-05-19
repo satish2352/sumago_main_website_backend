@@ -9,10 +9,11 @@ const {
   getAllCultureCategoryDetailsRecord 
 } = require("../controllers/cultureCategoryDetailsController");
 const { upload } = require("../controllers/cultureCategoryDetailsController");
+const verifyToken = require("../JWT/auth");
 
 const router = express.Router();
 
-router.get("/getallCultureDetails", async (req, res) => {
+router.get("/getallCultureDetails", verifyToken, async (req, res) => {
     try {
         await getAllCultureCategoryDetailsRecord(req, res);
     } catch (error) {
@@ -21,7 +22,24 @@ router.get("/getallCultureDetails", async (req, res) => {
     }
 });
 
-router.get("/getCultureDetails", async (req, res) => {
+router.get("/getCultureDetails", verifyToken, async (req, res) => {
+    try {
+        await getCultureCategoryDetailsRecord(req, res);
+    } catch (error) {
+        console.error("Error in getCultureCategoryDetailsRecord:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+router.get("/getallCultureDetailsRecord", async (req, res) => {
+    try {
+        await getAllCultureCategoryDetailsRecord(req, res);
+    } catch (error) {
+        console.error("Error in getAllCultureCategoryDetailsRecord:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+router.get("/getCultureDetailsRecord", async (req, res) => {
     try {
         await getCultureCategoryDetailsRecord(req, res);
     } catch (error) {
@@ -30,7 +48,7 @@ router.get("/getCultureDetails", async (req, res) => {
     }
 });
 
-router.post('/createCultureDetails',
+router.post('/createCultureDetails',verifyToken,
     upload.fields([{ name: 'img', maxCount: 1 }]),
     [
         body('category').notEmpty().withMessage('Category cannot be empty')
@@ -45,7 +63,7 @@ router.post('/createCultureDetails',
     }
 );
 
-router.put("/update/:id", 
+router.put("/update/:id", verifyToken,
     upload.fields([{ name: 'img', maxCount: 1 }]), 
     async (req, res) => {
     try {
@@ -56,7 +74,7 @@ router.put("/update/:id",
     }
 });
 
-router.delete("/delete/:id", async (req, res) => {
+router.delete("/delete/:id", verifyToken, async (req, res) => {
     try {
         await deleteCultureCategoryDetailsRecord(req, res);
     } catch (error) {

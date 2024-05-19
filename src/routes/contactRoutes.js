@@ -36,7 +36,7 @@ router.post('/records', [
     }
 });
 
-router.put('/records/:id', async (req, res) => {
+router.put('/records/:id',verifyToken, async (req, res) => {
     try {
         await updateRecord(req, res);
     } catch (error) {
@@ -45,7 +45,7 @@ router.put('/records/:id', async (req, res) => {
     }
 });
 
-router.delete('/records/:id', async (req, res) => {
+router.delete('/records/:id', verifyToken, async (req, res) => {
     try {
         await deleteRecord(req, res);
     } catch (error) {

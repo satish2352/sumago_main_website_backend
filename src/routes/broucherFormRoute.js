@@ -5,14 +5,6 @@ const verifyToken = require('../JWT/auth');
 
 const router = express.Router();
 
-router.get('/getBroucherDownload', async (req, res) => {
-    try {
-        await getRecords(req, res);
-    } catch (error) {
-        console.error("Error in getRecords:", error);
-        res.status(500).json({ error: "Internal server error" });
-    }
-});
 router.get('/getBroucherDownloadRecord', verifyToken, async (req, res) => {
     try {
         await getRecords(req, res);

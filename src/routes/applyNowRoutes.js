@@ -3,9 +3,10 @@ const { body } = require('express-validator');
 const { getApplyNowRecord, createApplyNowRecord, updateApplyNowRecord, deleteApplyNowRecord } = require('../controllers/applyNowController');
 const multer = require('multer');
 const { upload } = require("../controllers/applyNowController");
+const verifyToken = require('../JWT/auth');
 const router = express.Router();
 
-router.get('/find', async (req, res) => {
+router.get('/find', verifyToken, async (req, res) => {
     try {
         await getApplyNowRecord(req, res);
     } catch (error) {
@@ -40,7 +41,7 @@ router.post('/create',
     }
 );
 
-router.put('/update/:id', async (req, res) => {
+router.put('/update/:id', verifyToken, async (req, res) => {
     try {
         await updateApplyNowRecord(req, res);
     } catch (error) {
@@ -49,7 +50,7 @@ router.put('/update/:id', async (req, res) => {
     }
 });
 
-router.delete('/delete/:id', async (req, res) => {
+router.delete('/delete/:id', verifyToken, async (req, res) => {
     try {
         await deleteApplyNowRecord(req, res);
     } catch (error) {
