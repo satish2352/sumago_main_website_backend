@@ -43,6 +43,8 @@ try {
   app.use("/broucherDownload", broucherDownloadRoutes);
   const loginRoutes = require("./src/routes/userRoutes");
   app.use("/auth", loginRoutes);
+  const homesliderRoutes = require("./src/routes/homesliderroute");
+  app.use("/homeslider", homesliderRoutes);
 } catch (error) {
   console.error("Error while loading routes:", error);
 }
