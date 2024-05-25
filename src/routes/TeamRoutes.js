@@ -32,7 +32,7 @@ router.get("/getteam", async (req, res) => {
 router.post('/createteamRecord', verifyToken,
     upload.fields([{ name: 'img', maxCount: 1 }]),
     [
-        body('id').notEmpty().withMessage('id cannot be empty'),
+        // body('id').notEmpty().withMessage('id cannot be empty'),
         body('name').notEmpty().withMessage('Name cannot be empty'),
         body('fullname').notEmpty().withMessage('fullName cannot be empty'),
         body('designation').notEmpty().withMessage('Designation cannot be empty')
