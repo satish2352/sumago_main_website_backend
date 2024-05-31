@@ -1,74 +1,73 @@
 const express = require("express");
 const { body } = require("express-validator");
 const {
-  gethomesliderRecord,
-  createhomesliderRecord,
-  updatehomesliderRecord,
-  deletehomesliderRecord,
-} = require("../controllers/homeslidercontrollar");
+  gethomecardsRecord,
+  createhomecardsRecord,
+  updatehomecardsRecord,
+  deletehomecardsRecord,
+} = require("../controllers/homecardsController");
 const multer = require("multer");
-const { upload } = require("../controllers/homeslidercontrollar");
+const { upload } = require("../controllers/homecardsController");
 const verifyToken = require("../JWT/auth");
 
 const router = express.Router();
 
-router.get("/gethomesliderrecords", verifyToken, async (req, res) => {
+router.get("/gethomecardsRecord", verifyToken, async (req, res) => {
   try {
-    await gethomesliderRecord(req, res);
+    await gethomecardsRecord(req, res);
   } catch (error) {
-    console.error("Error in gethomesliderRecord:", error);
+    console.error("Error in gethomecardsRecord:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
-router.get("/gethomeslider", async (req, res) => {
+router.get("/gethomecards", async (req, res) => {
   try {
-    await gethomesliderRecord(req, res);
+    await gethomecardsRecord(req, res);
   } catch (error) {
-    console.error("Error in gethomesliderRecord:", error);
+    console.error("Error in gethomecardsRecord:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
 
 router.post(
-  "/createhomeslider",
-  // verifyToken,
+  "/createhomecardsRecord",
+  verifyToken,
   upload.fields([{ name: "img", maxCount: 1 }]),
   [
     body("title").notEmpty().withMessage("title cannot be empty"),
-    body("text").notEmpty().withMessage("text cannot be empty"),
   ],
   async (req, res) => {
     try {
-      await createhomesliderRecord(req, res);
+      await createhomecardsRecord(req, res);
     } catch (error) {
-      console.error("Error in createhomesliderRecord:", error);
+      console.error("Error in createhomecardsRecord:", error);
       res.status(500).json({ error: "Internal server error" });
     }
   }
 );
 
 router.put(
-  "/updatehomeslider/:id",
+  "/updatehomecardsRecord/:id",
   verifyToken,
   upload.fields([{ name: "img", maxCount: 1 }]),
   async (req, res) => {
     try {
-      await updatehomesliderRecord(req, res);
+      await updatehomecardsRecord(req, res);
     } catch (error) {
-      console.error("Error in updatehomesliderRecord:", error);
+      console.error("Error in updatehomecardsRecord:", error);
       res.status(500).json({ error: "Internal server error" });
     }
   }
 );
 
 router.delete(
-  "/deletehomesliderRecord/:id",
+  "/deletehomecardsRecord/:id",
   verifyToken,
   async (req, res) => {
     try {
-      await deletehomesliderRecord(req, res);
+      await deletehomecardsRecord(req, res);
     } catch (error) {
-      console.error("Error in deletehomesliderRecord:", error);
+      console.error("Error in deletehomecardsRecord:", error);
       res.status(500).json({ error: "Internal server error" });
     }
   }

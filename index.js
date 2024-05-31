@@ -45,6 +45,20 @@ try {
   app.use("/auth", loginRoutes);
   const homesliderRoutes = require("./src/routes/homesliderroute");
   app.use("/homeslider", homesliderRoutes);
+  const aboutmissionRoutes = require("./src/routes/aboutmission");
+  app.use("/aboutmission", aboutmissionRoutes);
+  const BlogdetailsRoutes = require("./src/routes/blogdetailPageRoute");
+  app.use("/Blogdetails", BlogdetailsRoutes);
+  const homecardsRoutes = require("./src/routes/homecardsRoutes");
+  app.use("/homecards", homecardsRoutes); 
+  const whysumagoRoutes = require("./src/routes/whysumagoRoute");
+  app.use("/whysumago", whysumagoRoutes);
+  const sectorsRoutes = require("./src/routes/sectorRoute");
+  app.use("/sectors", sectorsRoutes);
+  const hometechnologiesRoutes = require("./src/routes/hometechnologies");
+  app.use("/hometechnologies", hometechnologiesRoutes);
+  const offeredservicesRoutes = require("./src/routes/offeredservicesRoute");
+  app.use("/offeredservices", offeredservicesRoutes);
 } catch (error) {
   console.error("Error while loading routes:", error);
 }
