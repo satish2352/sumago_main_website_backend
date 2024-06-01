@@ -24,7 +24,7 @@ router.get("/find_all", verifyToken, async (req, res) => {
 
 router.get("/find", verifyToken, async (req, res) => {
     try {
-        await getaboutmissionRecord(req, res);
+        await getAllaboutmissionRecord(req, res);
     } catch (error) {
         console.error("Error in getaboutmissionRecord:", error);
         res.status(500).json({ error: "Internal server error" });
@@ -39,14 +39,7 @@ router.get("/getAllaboutmissionRecord", async (req, res) => {
     }
 });
 
-router.get("/getaboutmissionRecord", async (req, res) => {
-    try {
-        await getaboutmissionRecord(req, res);
-    } catch (error) {
-        console.error("Error in getaboutmissionRecord:", error);
-        res.status(500).json({ error: "Internal server error" });
-    }
-});
+
 
 router.post('/create',
     upload.fields([{ name: 'img', maxCount: 1 }]),

@@ -8,13 +8,6 @@ function getAllaboutmission(callback) {
     }
 }
 
-function getaboutmission(title, callback) {
-    try {
-        db.query('SELECT * FROM aboutmission WHERE title = ?', title, callback);
-    } catch (error) {
-        callback(error, null);
-    }
-}
 
 function createaboutmission(recordData, callback) {
     try {
@@ -51,7 +44,6 @@ function deleteaboutmission(id, callback) {
 }
 
 module.exports = {
-    getaboutmission,
     createaboutmission,
     updateaboutmission,
     deleteaboutmission,

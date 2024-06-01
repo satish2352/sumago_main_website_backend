@@ -8,13 +8,7 @@ function getAllaboutvision(callback) {
     }
 }
 
-function getaboutvision(title, callback) {
-    try {
-        db.query('SELECT * FROM aboutvision WHERE title = ?', title, callback);
-    } catch (error) {
-        callback(error, null);
-    }
-}
+
 
 function createaboutvision(recordData, callback) {
     try {
@@ -53,7 +47,6 @@ function deleteaboutvision(id, callback) {
 }
 
 module.exports = {
-    getaboutvision,
     createaboutvision,
     updateaboutvision,
     deleteaboutvision,

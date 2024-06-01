@@ -51,7 +51,7 @@ function getAllaboutvisionRecord(req, res) {
 function getaboutvisionRecord(req, res) {
   try {
     const title = req.query.title; // Extract title from query parameters
-    recordModel.getaboutvision(title, (err, results) => {
+    recordModel.getAllaboutvision(title, (err, results) => {
       if (err) {
         console.error("Error fetching records:", err);
         return res.status(500).json({ error: "Internal Server Error" });

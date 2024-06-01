@@ -22,14 +22,7 @@ router.get("/find_all", verifyToken, async (req, res) => {
     }
 });
 
-router.get("/find", verifyToken, async (req, res) => {
-    try {
-        await getaboutvisionRecord(req, res);
-    } catch (error) {
-        console.error("Error in getaboutvisionRecord:", error);
-        res.status(500).json({ error: "Internal server error" });
-    }
-});
+
 router.get("/getAllaboutvisionRecord", async (req, res) => {
     try {
         await getAllaboutvisionRecord(req, res);

@@ -47,6 +47,8 @@ try {
   app.use("/homeslider", homesliderRoutes);
   const aboutmissionRoutes = require("./src/routes/aboutmission");
   app.use("/aboutmission", aboutmissionRoutes);
+  const aboutvissonRoutes = require("./src/routes/aboutvision");
+  app.use("/aboutvission", aboutvissonRoutes);
   const BlogdetailsRoutes = require("./src/routes/blogdetailPageRoute");
   app.use("/Blogdetails", BlogdetailsRoutes);
   const homecardsRoutes = require("./src/routes/homecardsRoutes");

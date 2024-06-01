@@ -42,27 +42,7 @@ function getAllaboutmissionRecord(req, res) {
   }
 }
 
-function getaboutmissionRecord(req, res) {
-  try {
-    const title = req.query.title; // Extract title from query parameters
-    recordModel.getaboutmission(title, (err, results) => {
-      if (err) {
-        console.error("Error fetching records:", err);
-        return res.status(500).json({ error: "Internal Server Error" });
-      }
-      const modifiedResults = results.map((item) => ({
-        id: item.id,
-        title: item.title,
-        img: `${process.env.serverURL}${item.img}`,
-      }));
 
-      res.json(modifiedResults);
-    });
-  } catch (error) {
-    console.error("Error in getaboutmissionRecord:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-}
 
 function createaboutmissionRecord(req, res) {
   try {
@@ -130,7 +110,6 @@ function deleteaboutmissionRecord(req, res) {
 }
 
 module.exports = {
-  getaboutmissionRecord,
   createaboutmissionRecord,
   updateaboutmissionRecord,
   deleteaboutmissionRecord,
