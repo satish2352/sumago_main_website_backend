@@ -28,7 +28,7 @@ function updateaboutvision(id, recordData, callback) {
     const values = Object.values(recordData);
     values.push(id);
 
-    const query = `UPDATE aboutmission SET ${fields} WHERE id = ?`;
+    const query = `UPDATE aboutvision SET ${fields} WHERE id = ?`;
 
     try {
         db.query(query, values, callback);

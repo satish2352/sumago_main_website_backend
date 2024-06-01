@@ -59,7 +59,6 @@ router.post('/create',
 
 router.put(
     "/update/:id",
-    verifyToken,
     upload.fields([{ name: "img", maxCount: 1 }]),
     async (req, res) => {
       try {
