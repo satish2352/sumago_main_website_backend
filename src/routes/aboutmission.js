@@ -2,7 +2,6 @@ const express = require("express");
 const { body } = require("express-validator");
 const multer = require("multer");
 const {
-  getaboutmissionRecord,
   createaboutmissionRecord,
   updateaboutmissionRecord,
   deleteaboutmissionRecord,
