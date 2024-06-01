@@ -15,11 +15,7 @@ const storage = multer.diskStorage({
     cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
-    cb(
-      null,
-      // file.fieldname + "_" + Date.now() + path.extname(file.originalname)
-      file.originalname
-    );
+    cb(null, file.originalname);
   },
 });
 
@@ -32,13 +28,11 @@ function getAllaboutmissionRecord(req, res) {
         console.error("Error fetching records:", err);
         return res.status(500).json({ error: "Internal Server Error" });
       }
-      const modifiedResults = results.map((item) => {
-        return {
-          id: item.id,
-          title: item.title,
-          img: `${process.env.serverURL}${item.img}`,
-        };
-      });
+      const modifiedResults = results.map((item) => ({
+        id: item.id,
+        title: item.title,
+        img: `${process.env.serverURL}${item.img}`,
+      }));
 
       res.json(modifiedResults);
     });
@@ -56,16 +50,12 @@ function getaboutmissionRecord(req, res) {
         console.error("Error fetching records:", err);
         return res.status(500).json({ error: "Internal Server Error" });
       }
-      const modifiedResults = results.map((item) => {
-        // Add a new property called 'modified' with value true
-        return {
-          id: item.id,
-          title: item.title,
-          img: `${process.env.serverURL}${item.img}`,
-        };
-      });
+      const modifiedResults = results.map((item) => ({
+        id: item.id,
+        title: item.title,
+        img: `${process.env.serverURL}${item.img}`,
+      }));
 
-      // Send the modified data as response
       res.json(modifiedResults);
     });
   } catch (error) {
@@ -77,21 +67,23 @@ function getaboutmissionRecord(req, res) {
 function createaboutmissionRecord(req, res) {
   try {
     const errors = validationResult(req);
-    // if (!errors.isEmpty()) {
-    //   return res.status(400).json({ errors: errors.array() });
-    // }
-    const recordData = req.body;
-    const imgFile = req.files["img"][0]; // Uploaded CV file
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
 
-    recordData.img = imgFile.originalname;
+    const recordData = req.body;
+    const imgFile = req.file;
+
+    if (imgFile) {
+      recordData.img = imgFile.originalname;
+    }
+
     recordModel.createaboutmission(recordData, (err, result) => {
       if (err) {
         console.error("Error creating record:", err);
         return res.status(500).json({ error: "Internal Server Error" });
       }
-      res
-        .status(201)
-        .json({ message: "Record created successfully", result: recordData });
+      res.status(201).json({ message: "Record created successfully", result: recordData });
     });
   } catch (error) {
     console.error("Error in createaboutmissionRecord:", error);
@@ -103,12 +95,17 @@ function updateaboutmissionRecord(req, res) {
   try {
     const { id } = req.params;
     const recordData = req.body;
+
+    if (req.file) {
+      recordData.img = req.file.originalname;
+    }
+
     recordModel.updateaboutmission(id, recordData, (err, result) => {
       if (err) {
         console.error("Error updating record:", err);
         return res.status(500).json({ error: "Internal Server Error" });
       }
-      res.send("Record updated successfully");
+      res.json({ message: "Record updated successfully" });
     });
   } catch (error) {
     console.error("Error in updateaboutmissionRecord:", error);

@@ -25,8 +25,18 @@ function createaboutmission(recordData, callback) {
 }
 
 function updateaboutmission(id, recordData, callback) {
+    if (Object.keys(recordData).length === 0) {
+        return callback(new Error('No data provided to update'), null);
+    }
+
+    const fields = Object.keys(recordData).map(field => `${field} = ?`).join(', ');
+    const values = Object.values(recordData);
+    values.push(id);
+
+    const query = `UPDATE aboutmission SET ${fields} WHERE id = ?`;
+
     try {
-        db.query('UPDATE aboutmission SET ? WHERE id = ?', [recordData, id], callback);
+        db.query(query, values, callback);
     } catch (error) {
         callback(error, null);
     }
@@ -45,5 +55,5 @@ module.exports = {
     createaboutmission,
     updateaboutmission,
     deleteaboutmission,
-    getAllaboutmission 
+    getAllaboutmission
 };

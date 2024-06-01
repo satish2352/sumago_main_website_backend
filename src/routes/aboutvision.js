@@ -63,14 +63,20 @@ router.post('/create',
     }
 );
 
-router.put("/update/:id", verifyToken, async (req, res) => {
-    try {
+
+router.put(
+    "/update/:id",
+    verifyToken,
+    upload.fields([{ name: "img", maxCount: 1 }]),
+    async (req, res) => {
+      try {
         await updateaboutvisionRecord(req, res);
-    } catch (error) {
-        console.error("Error in updateaboutvisionRecord:", error);
+      } catch (error) {
+        console.error("Error in updateAppreciationRecord:", error);
         res.status(500).json({ error: "Internal server error" });
+      }
     }
-});
+  );
 
 router.delete("/delete/:id", verifyToken, async (req, res) => {
     try {

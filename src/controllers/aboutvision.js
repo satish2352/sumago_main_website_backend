@@ -99,22 +99,30 @@ function createaboutvisionRecord(req, res) {
   }
 }
 
+
+
 function updateaboutvisionRecord(req, res) {
   try {
     const { id } = req.params;
     const recordData = req.body;
+
+    if (req.file) {
+      recordData.img = req.file.originalname;
+    }
+
     recordModel.updateaboutvision(id, recordData, (err, result) => {
       if (err) {
         console.error("Error updating record:", err);
         return res.status(500).json({ error: "Internal Server Error" });
       }
-      res.send("Record updated successfully");
+      res.json({ message: "Record updated successfully" });
     });
   } catch (error) {
-    console.error("Error in updateaboutvisionRecord:", error);
+    console.error("Error in updateaboutmissionRecord:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
+
 
 function deleteaboutvisionRecord(req, res) {
   try {
