@@ -2,7 +2,7 @@ const db = require('../../db');
 
 function gethomecards(callback) {
     try {
-        db.query('SELECT * FROM sectors', callback);
+        db.query('SELECT * FROM homesectioncards', callback);
     } catch (error) {
         callback(error, null);
     }
@@ -10,7 +10,7 @@ function gethomecards(callback) {
 
 function createhomecards(recordData, callback) {
     try {
-        db.query('INSERT INTO sectors SET ?', recordData, callback);
+        db.query('INSERT INTO homesectioncards SET ?', recordData, callback);
     } catch (error) {
         callback(error, null);
     }
@@ -25,14 +25,14 @@ function updatehomecards(id, recordData, callback) {
     const values = Object.values(recordData);
     values.push(id);
 
-    const query = `UPDATE sectors SET ${fields} WHERE id = ?`;
+    const query = `UPDATE homesectioncards SET ${fields} WHERE id = ?`;
 
     db.query(query, values, callback);
 }
 
 function deletehomecards(id, callback) {
     try {
-        db.query('DELETE FROM sectors WHERE id = ?', id, callback);
+        db.query('DELETE FROM homesectioncards WHERE id = ?', id, callback);
     } catch (error) {
         callback(error, null);
     }

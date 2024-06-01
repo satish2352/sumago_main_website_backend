@@ -31,7 +31,7 @@ router.get("/gethomecards", async (req, res) => {
 
 router.post(
   "/createhomecardsRecord",
-  verifyToken,
+ 
   upload.fields([{ name: "img", maxCount: 1 }]),
   [
     body("title").notEmpty().withMessage("title cannot be empty"),
