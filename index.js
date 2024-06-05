@@ -61,6 +61,8 @@ try {
   app.use("/hometechnologies", hometechnologiesRoutes);
   const offeredservicesRoutes = require("./src/routes/offeredservicesRoute");
   app.use("/offeredservices", offeredservicesRoutes);
+  const ContactInfo = require("./src/routes/contactInfoRoute");
+  app.use("/contactInfo", ContactInfo);
 } catch (error) {
   console.error("Error while loading routes:", error);
 }
