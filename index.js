@@ -55,8 +55,8 @@ try {
   app.use("/homecards", homecardsRoutes); 
   const whysumagoRoutes = require("./src/routes/whysumagoRoute");
   app.use("/whysumago", whysumagoRoutes);
-  const sectorsRoutes = require("./src/routes/sectorRoute");
-  app.use("/sectors", sectorsRoutes);
+  const sectorsRoutes = require("./src/routes/sectorsRoutes");
+  app.use("/sector", sectorsRoutes);
   const hometechnologiesRoutes = require("./src/routes/hometechnologies");
   app.use("/hometechnologies", hometechnologiesRoutes);
   const offeredservicesRoutes = require("./src/routes/offeredservicesRoute");
