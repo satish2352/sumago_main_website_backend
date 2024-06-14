@@ -17,7 +17,7 @@ function getRecords(req, res) {
     }
 }
 
-function createRecord(req, res) {
+function createRecord(req, res) {   
     try {
         const errors = validationResult(req);
         const recordData = req.body;

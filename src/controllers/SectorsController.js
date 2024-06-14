@@ -2,7 +2,7 @@
 const { validationResult } = require("express-validator");
 const path = require("path");
 const fs = require("fs");
-const recordModel = require("../models/sectorsModal");
+const recordModel = require("../models/SectorsModal");
 const multer = require("multer");
 const env = require("dotenv").config();
 
