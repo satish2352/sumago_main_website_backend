@@ -1,19 +1,36 @@
 const db = require('../../db');
 
 function getAllRecords(callback) {
-    db.query('SELECT * FROM contactinfoset', callback);
+    try {
+        db.query('SELECT * FROM contactinfoset', callback);
+    } catch (error) {
+        callback(error, null);
+    }
 }
 
 function createRecord(recordData, callback) {
-    db.query('INSERT INTO contactinfoset SET ?', recordData, callback);
+    try {
+        recordData.created_at = new Date();
+        db.query('INSERT INTO contactinfoset SET ?', recordData, callback);
+    } catch (error) {
+        callback(error, null);
+    }
 }
 
 function updateRecord(id, recordData, callback) {
-    db.query('UPDATE contactinfoset SET ? WHERE id = ?', [recordData, id], callback);
+    try {
+        db.query('UPDATE contactinfoset SET ? WHERE id = ?', [recordData, id], callback);
+    } catch (error) {
+        callback(error, null);
+    }
 }
 
 function deleteRecord(id, callback) {
-    db.query('DELETE FROM contactinfoset WHERE id = ?', id, callback);
+    try {
+        db.query('DELETE FROM contactinfoset WHERE id = ?', id, callback);
+    } catch (error) {
+        callback(error, null);
+    }
 }
 
 module.exports = {

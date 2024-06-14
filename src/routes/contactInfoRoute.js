@@ -5,25 +5,52 @@ const verifyToken = require('../JWT/auth');
 
 const router = express.Router();
 
-router.get('/getContactInfo', verifyToken, async (req, res) => {
-    await getRecords(req, res);
+router.get('/getrecords', async (req, res) => {
+    try {
+        await getRecords(req, res);
+    } catch (error) {
+        console.error("Error in getRecords:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
 });
-
-router.post('/createContactInfo', verifyToken, [
-    body('phone1').notEmpty().withMessage('Phone1 is required'),
-    body('phone2').notEmpty().withMessage('Phone2 is required'),
-    body('phone3').notEmpty().withMessage('Phone3 is required'),
-    body('email').isEmail().withMessage('Valid email is required'),
+router.get('/getContactRecords', verifyToken, async (req, res) => {
+    try {
+        await getRecords(req, res);
+    } catch (error) {
+        console.error("Error in getRecords:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+router.post('/records', [
+    body('phone1').notEmpty().withMessage('Name cannot be empty'),
+    body('email').isEmail().withMessage('Invalid email format'),
+    body('phone2').notEmpty().withMessage('Message cannot be empty'),
+    body('phone3').notEmpty().withMessage('Phone cannot be empty')
 ], async (req, res) => {
-    await createRecord(req, res);
+    try {
+        await createRecord(req, res);
+    } catch (error) {
+        console.error("Error in createRecord:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
 });
 
-router.put('/updateContactInfo/:id', verifyToken, async (req, res) => {
-    await updateRecord(req, res);
+router.put('/records/:id', verifyToken, async (req, res) => {
+    try {
+        await updateRecord(req, res);
+    } catch (error) {
+        console.error("Error in updateRecord:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
 });
 
-router.delete('/deleteContactInfo/:id', verifyToken, async (req, res) => {
-    await deleteRecord(req, res);
+router.delete('/records/:id', verifyToken, async (req, res) => {
+    try {
+        await deleteRecord(req, res);
+    } catch (error) {
+        console.error("Error in deleteRecord:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
 });
 
 module.exports = router;
