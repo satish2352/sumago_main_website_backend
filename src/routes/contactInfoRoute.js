@@ -25,7 +25,8 @@ router.post('/records', [
     body('phone1').notEmpty().withMessage('Name cannot be empty'),
     body('email').isEmail().withMessage('Invalid email format'),
     body('phone2').notEmpty().withMessage('Message cannot be empty'),
-    body('phone3').notEmpty().withMessage('Phone cannot be empty')
+    body('phone3').notEmpty().withMessage('Phone cannot be empty'),
+    body('phone4').notEmpty().withMessage('Phone cannot be empty')
 ], async (req, res) => {
     try {
         await createRecord(req, res);
