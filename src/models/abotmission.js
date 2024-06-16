@@ -1,13 +1,12 @@
 const db = require('../../db');
 
-function getAllaboutmission(callback) {
+function getaboutmission(callback) {
     try {
         db.query('SELECT * FROM aboutmission', callback);
     } catch (error) {
         callback(error, null);
     }
 }
-
 
 function createaboutmission(recordData, callback) {
     try {
@@ -28,11 +27,7 @@ function updateaboutmission(id, recordData, callback) {
 
     const query = `UPDATE aboutmission SET ${fields} WHERE id = ?`;
 
-    try {
-        db.query(query, values, callback);
-    } catch (error) {
-        callback(error, null);
-    }
+    db.query(query, values, callback);
 }
 
 function deleteaboutmission(id, callback) {
@@ -44,8 +39,8 @@ function deleteaboutmission(id, callback) {
 }
 
 module.exports = {
+    getaboutmission,
     createaboutmission,
     updateaboutmission,
-    deleteaboutmission,
-    getAllaboutmission
+    deleteaboutmission
 };
