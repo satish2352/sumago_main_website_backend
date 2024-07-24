@@ -24,6 +24,15 @@ function createRecord(req, res) {
         recordModel.createRecord(recordData, (err, result) => {
             if (err) {
                 console.error('Error creating record:', err);
+                if (err.code === 'ER_DUP_ENTRY') {
+                    if (err.message.includes('email')) {
+                        return res.status(409).json({ error: "Email already exists" });
+                    } else if (err.message.includes('phone')) {
+                        return res.status(409).json({ error: "Phone number already exists" });
+                    } else {
+                        return res.status(409).json({ error: "Duplicate entry" });
+                    }
+                }
                 return res.status(500).json({ error: 'Internal Server Error' });
             }
             res.status(201).json({ message: 'Record created successfully', result: recordData });

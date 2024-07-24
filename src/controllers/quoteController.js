@@ -20,16 +20,30 @@ function getQuoteRecord(req, res) {
 function createQuoteRecord(req, res) {
     try {
         const errors = validationResult(req);
-        // if (!errors.isEmpty()) {
-        //     return res.status(400).json({ errors: errors.array() });
-        // }
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
 
         const recordData = req.body;
+
         recordModel.createQuote(recordData, (err, result) => {
             if (err) {
                 console.error('Error creating record:', err);
+
+                // Check for duplicate entry errors
+                if (err.code === 'ER_DUP_ENTRY') {
+                    if (err.message.includes('email')) {
+                        return res.status(409).json({ error: "Email already exists" });
+                    } else if (err.message.includes('phone')) {
+                        return res.status(409).json({ error: "Phone number already exists" });
+                    } else {
+                        return res.status(409).json({ error: "Duplicate entry" });
+                    }
+                }
+
                 return res.status(500).json({ error: 'Internal Server Error' });
             }
+
             res.status(201).json({ message: 'Record created successfully', result: recordData });
         });
     } catch (error) {
@@ -37,7 +51,6 @@ function createQuoteRecord(req, res) {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 }
-
 function updateQuoteRecord(req, res) {
     try {
         const { id } = req.params;
