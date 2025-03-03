@@ -26,10 +26,10 @@ router.post('/create', [
     body('name').notEmpty().withMessage('Name cannot be empty'),
     body('phone').notEmpty().withMessage('Phone cannot be empty'),
     body('email').isEmail().withMessage('Invalid email format'),
-    body('service').notEmpty().withMessage('Service cannot be empty'),
-    body('other_service').notEmpty().withMessage('Other_service cannot be empty'),
+    // body('services').notEmpty().withMessage('Service cannot be empty'),
+    body('other_service').optional().isString().withMessage('Other service must be a string'),
     body('address').notEmpty().withMessage('Address cannot be empty'),
-    body('comment').notEmpty().withMessage('Comment cannot be empty')
+    // body('comment').notEmpty().withMessage('Comment cannot be empty')
 ], async (req, res) => {
     try {
         await createQuoteRecord(req, res);
@@ -38,6 +38,7 @@ router.post('/create', [
         res.status(500).json({ error: "Internal server error" });
     }
 });
+
 
 router.put('/update/:id', verifyToken, async (req, res) => {
     try {
