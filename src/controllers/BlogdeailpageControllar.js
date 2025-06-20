@@ -6,25 +6,7 @@ const recordModel = require("../models/BlogdeatilspageModel");
 const multer = require("multer");
 const env = require("dotenv").config();
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadDir = path.join(__dirname, "../../uploads");
-    // Check if the upload directory exists, if not, create it
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    cb(
-      null,
-      // file.fieldname + "_" + Date.now() + path.extname(file.originalname)
-      file.originalname
-    );
-  },
-});
 
-const upload = multer({ storage: storage });
 
 function getBlogdetailsRecord(req, res) {
   try {
@@ -37,10 +19,10 @@ function getBlogdetailsRecord(req, res) {
         // Add a new property called 'modified' with value true
         return {
           id: item.id,
-          title:item.title,
-          text:item.text,
-          date:item.date,
-          subtitle:item.subtitle,
+          title: item.title,
+          text: item.text,
+          date: item.date,
+          subtitle: item.subtitle,
           img: `${process.env.serverURL}${item.img}`,
         };
       });
@@ -68,10 +50,10 @@ function getBlogdetailsByIdRecord(req, res) {
         // Add a new property called 'modified' with value true
         return {
           id: item.id,
-          title:item.title,
-          text:item.text,
-          date:item.date,
-          subtitle:item.subtitle,
+          title: item.title,
+          text: item.text,
+          date: item.date,
+          subtitle: item.subtitle,
           img: `${process.env.serverURL}${item.img}`,
         };
       });
@@ -82,31 +64,75 @@ function getBlogdetailsByIdRecord(req, res) {
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
-function createBlogdetailsRecord(req, res) {
-  try {
-    const errors = validationResult(req);
-    // if (!errors.isEmpty()) {
-    //   return res.status(400).json({ errors: errors.array() });
-    // }
-    const recordData = req.body;
-    const imgFile = req.files["img"][0]; // Uploaded CV file
 
-    recordData.img = imgFile.originalname;
-    recordModel.createBlogdetails(recordData, (err, result) => {
-      if (err) {
-        console.error("Error creating record:", err);
-        return res.status(500).json({ error: "Internal Server Error" });
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadDir = path.join(__dirname, "../../uploads");
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    const originalName = file.originalname;
+    const sanitized = originalName
+      .toLowerCase()
+      .replace(/\s+/g, '-')         // Replace spaces with -
+      .replace(/[^\w.-]+/g, '')     // Remove non-alphanumeric except dot and dash
+      .replace(/-+/g, '-');         // Collapse multiple dashes
+    const timestamp = Date.now();
+    cb(null, `${timestamp}-${sanitized}`);
+  },
+});
+
+const upload = multer({ storage: storage });
+
+// Process base64 images embedded in HTML
+function processBase64Images(htmlContent) {
+  return htmlContent.replace(
+    /<img[^>]+src=["'](data:image\/(png|jpeg|jpg|gif);base64,([^"']+))["'][^>]*>/g,
+    (match, fullData, ext, base64Data) => {
+      try {
+        const buffer = Buffer.from(base64Data, "base64");
+        const filename = `image_${Date.now()}.${ext}`;
+        const filePath = path.join(__dirname, "../../uploads/blogdetails", filename);
+        fs.mkdirSync(path.dirname(filePath), { recursive: true });
+        fs.writeFileSync(filePath, buffer);
+        return `<div style="text-align: center;">
+          <img src="${process.env.SERVER_PATH}uploads/blogdetails/${filename}" alt="blog image" width="50%" height="auto"/>
+        </div>`;
+      } catch (error) {
+        console.error("Error processing base64 image:", error);
+        return match;
       }
-      res
-        .status(201)
-        .json({ message: "Record created successfully", result: recordData });
-    });
-  } catch (error) {
-    console.error("Error in createBlogdetailsRecord:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
+    }
+  );
 }
 
+async function createBlogdetailsRecord(req, res) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ success: false, errors: errors.array() });
+  }
+
+  const recordData = req.body;
+
+  // Featured image
+  const imgFile = req.files?.img?.[0];
+  recordData.img = imgFile ? `/${imgFile.filename}` : null;
+
+  // Process base64 images
+  recordData.text = recordData.text ? processBase64Images(recordData.text) : '';
+  recordData.subtitle = recordData.subtitle ? processBase64Images(recordData.subtitle) : '';
+
+  recordModel.createBlogdetails(recordData, (err, result) => {
+    if (err) {
+      console.error("Error creating record:", err);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+    res.status(201).json({ message: "Record created successfully", result: recordData });
+  });
+}
 function updateBlogdetailsRecord(req, res) {
   try {
     const { id } = req.params;
@@ -114,7 +140,15 @@ function updateBlogdetailsRecord(req, res) {
 
     if (req.files && req.files["img"]) {
       const imgFile = req.files["img"][0];
-      recordData.img = imgFile.originalname;
+      recordData.img = imgFile.filename; // Use sanitized filename from multer
+    }
+
+    // Optional: If you're supporting embedded images in text/subtitle again
+    if (recordData.text) {
+      recordData.text = processBase64Images(recordData.text);
+    }
+    if (recordData.subtitle) {
+      recordData.subtitle = processBase64Images(recordData.subtitle);
     }
 
     recordModel.updateBlogdetails(id, recordData, (err, result) => {

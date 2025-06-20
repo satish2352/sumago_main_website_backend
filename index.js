@@ -8,7 +8,7 @@ const env = require("dotenv").config();
 app.use(express.json());
 app.use(cors());
 app.use("/uploads", express.static(path.join(__dirname, "./uploads")));
- 
+
 // Routes
 try {
   const recordsRoutes = require("./src/routes/contactRoutes");
@@ -52,7 +52,7 @@ try {
   const BlogdetailsRoutes = require("./src/routes/blogdetailPageRoute");
   app.use("/Blogdetails", BlogdetailsRoutes);
   const homecardsRoutes = require("./src/routes/homecardsRoutes");
-  app.use("/homecards", homecardsRoutes); 
+  app.use("/homecards", homecardsRoutes);
   const whysumagoRoutes = require("./src/routes/whysumagoRoute");
   app.use("/whysumago", whysumagoRoutes);
   const sectorsRoutes = require("./src/routes/sectorsRoutes");
@@ -63,6 +63,9 @@ try {
   app.use("/offeredservices", offeredservicesRoutes);
   const ContactInfo = require("./src/routes/contactInfoRoute");
   app.use("/contactInfo", ContactInfo);
+  const ckeditorUploadRoutes = require("./src/routes/ckeditorUploadRoutes");
+  app.use("/ckuploads", ckeditorUploadRoutes);
+
 } catch (error) {
   console.error("Error while loading routes:", error);
 }

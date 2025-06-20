@@ -41,12 +41,17 @@ router.get("/getBlogdetails/:id", async (req, res) => {
 });
 router.post(
   "/createBlogdetailsRecord",
- 
+
   upload.fields([{ name: "img", maxCount: 1 }]),
   [
     body("title").notEmpty().withMessage("title cannot be empty"),
-    body("text").notEmpty().withMessage("text cannot be empty"),
-    body("subtitle").notEmpty().withMessage("subtitle cannot be empty"),
+    body("text")
+      .custom((value) => {
+        const strippedText = value.replace(/<[^>]*>?/gm, '').trim();
+        return strippedText.length > 0;
+      })
+      .withMessage("text cannot be empty"),
+
     body("date").notEmpty().withMessage("date cannot be empty"),
 
 
