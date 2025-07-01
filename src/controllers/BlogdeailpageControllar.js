@@ -23,6 +23,7 @@ function getBlogdetailsRecord(req, res) {
           text: item.text,
           date: item.date,
           subtitle: item.subtitle,
+          category: item.category,
           img: `${process.env.serverURL}${item.img}`,
         };
       });

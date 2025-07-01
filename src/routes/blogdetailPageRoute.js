@@ -45,6 +45,8 @@ router.post(
   upload.fields([{ name: "img", maxCount: 1 }]),
   [
     body("title").notEmpty().withMessage("title cannot be empty"),
+    body("category").notEmpty().withMessage("category cannot be empty"),
+
     body("text")
       .custom((value) => {
         const strippedText = value.replace(/<[^>]*>?/gm, '').trim();
