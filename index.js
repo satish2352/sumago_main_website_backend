@@ -65,6 +65,8 @@ try {
   app.use("/contactInfo", ContactInfo);
   const ckeditorUploadRoutes = require("./src/routes/ckeditorUploadRoutes");
   app.use("/ckuploads", ckeditorUploadRoutes);
+  const blogcategoryRoutes = require("./src/routes/blogcategory");
+  app.use("/blogcategory", blogcategoryRoutes);
 
 } catch (error) {
   console.error("Error while loading routes:", error);
